@@ -1,5 +1,7 @@
 package model;
 
+import util.QueueException;
+
 public class Factory {
 
 	private PEPS peps;

@@ -2,6 +2,7 @@ package model;
 import util.Pair;
 import util.Queue;
 import util.QueueException;
+import util.Stack;
 
 public class PEPS {
 	private Queue<Pair<Double, Integer>> inventory;
@@ -64,6 +65,16 @@ public class PEPS {
 	public void returnPurchase(int units) throws QueueException
 	{
 		int returned = 0;
+		Stack<Pair<Double, Integer>> stack = new Stack<>();
+		while(!inventory.isEmpty())
+		{
+			stack.push(inventory.dequeue());
+		}
+		while(!stack.isEmpty())
+		{
+			inventory.enqueue(stack.top());
+			stack.pop();
+		}
 		while(returned<units)
 		{
 			if(inventory.front().getValue()<(units-returned))
@@ -91,6 +102,15 @@ public class PEPS {
 				inventory.dequeue();
 				returned=units;
 			}
+		}
+		while(!inventory.isEmpty())
+		{
+			stack.push(inventory.dequeue());
+		}
+		while(!stack.isEmpty())
+		{
+			inventory.enqueue(stack.top());
+			stack.pop();
 		}
 		num_purchases-=units;
 	}
