@@ -91,20 +91,20 @@ public class PanelBotonesEstadoResultados extends JPanel {
 		jTxtNombreCompania.setText("");
 	}
 
-	public JTextField getjTxtGastosOp() {
-		return jTxtGastosOp;
+	public double getjTxtGastosOp() {
+		return Double.parseDouble(jTxtGastosOp.getText());
 	}
 
-	public JTextField getjTxtOtrosIngresos() {
-		return jTxtOtrosIngresos;
+	public double getjTxtOtrosIngresos() {
+		return Double.parseDouble(jTxtOtrosIngresos.getText());
 	}
 
-	public JTextField getjTxtOtrosGastos() {
-		return jTxtOtrosGastos;
+	public double getjTxtOtrosGastos() {
+		return Double.parseDouble(jTxtOtrosGastos.getText());
 	}
 
-	public JTextField getjTxtImpuesto() {
-		return jTxtImpuesto;
+	public double getjTxtImpuesto() {
+		return Double.parseDouble(jTxtImpuesto.getText());
 	}
 
 	public JTextField getjTxtNombreCompania() {
@@ -115,5 +115,9 @@ public class PanelBotonesEstadoResultados extends JPanel {
 		return jTxtFecha;
 	}
 	
+	public boolean getReservas()
+	{
+		return jRadioButSi.isSelected();
+	}
 
 }

@@ -50,8 +50,12 @@ public class VentanaGenerarEstado extends JFrame {
 
 	public void generarEstado() {
 		Factory f = principal.getFactory();
+		String nombre = panelBotonesEstado.getjTxtNombreCompania().getText();
+		String fecha = panelBotonesEstado.getjTxtFecha().getText();
+		panelTablaEstadoDeResultados.inicializarTabla(f.getSales(), f.getCostSales(), panelBotonesEstado.getjTxtGastosOp(),
+		panelBotonesEstado.getjTxtOtrosIngresos(), panelBotonesEstado.getjTxtOtrosGastos(),
+		panelBotonesEstado.getjTxtImpuesto(), panelBotonesEstado.getReservas());
 		
-		//panelBotonesEstado.
 		
 	}
 
