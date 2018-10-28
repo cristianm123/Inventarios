@@ -90,5 +90,15 @@ public class PanelTablaEstadoDeResultados extends JPanel {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public DefaultTableModel getDtm()
+	{
+		return dtm;
+	}
+	
+	public PanelTitulosEstado getTitulos()
+	{
+		return panelTitulosEstado;
+	}
 
 }

@@ -46,9 +46,9 @@ public class PanelIndicadores extends JPanel {
 	}
 
 	public void mostrarIndicadores(double rentabilidadBruta, double rentabilidadOperativa, double rentabilidadNeta) {
-		valorRentabilidadBruta.setText(rentabilidadBruta +"");
-		valorRentabilidadOperativa.setText(rentabilidadOperativa+"");
-		valorRentabilidadNeta.setText(rentabilidadNeta+"");
+		valorRentabilidadBruta.setText(rentabilidadBruta+"%");
+		valorRentabilidadOperativa.setText(rentabilidadOperativa+"%");
+		valorRentabilidadNeta.setText(rentabilidadNeta+"%");
 		
 	}
 	

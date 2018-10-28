@@ -47,11 +47,17 @@ public class VentanaGenerarEstado extends JFrame {
 		
 	}
 
+	public PanelTablaEstadoDeResultados getTabla()
+	{
+		return panelTablaEstadoDeResultados;
+	}
 
 	public void generarEstado() {
 		Factory f = principal.getFactory();
 		String nombre = panelBotonesEstado.getjTxtNombreCompania().getText();
 		String fecha = panelBotonesEstado.getjTxtFecha().getText();
+		panelTablaEstadoDeResultados.getTitulos().cambiarNombreCia(("Nombre compañia: " + nombre));
+		panelTablaEstadoDeResultados.getTitulos().cambiarPeriodo(("Periodo: "+fecha));
 		panelTablaEstadoDeResultados.inicializarTabla(f.getSales(), f.getCostSales(), panelBotonesEstado.getjTxtGastosOp(),
 		panelBotonesEstado.getjTxtOtrosIngresos(), panelBotonesEstado.getjTxtOtrosGastos(),
 		panelBotonesEstado.getjTxtImpuesto(), panelBotonesEstado.getReservas());

@@ -119,5 +119,14 @@ public class PanelBotonesEstadoResultados extends JPanel {
 	{
 		return jRadioButSi.isSelected();
 	}
+	
+	public JLabel getNombre()
+	{
+		return labNombreCompania;
+	}
 
+	public JLabel getPeriodo()
+	{
+		return labFecha;
+	}
 }

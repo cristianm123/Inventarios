@@ -21,7 +21,7 @@ public class PanelTitulosEstado extends JPanel {
 		this.setLayout(new GridLayout(3,1));
 		this.setPreferredSize(new Dimension(350,150));
 		this.setBorder(BorderFactory.createTitledBorder("E / R"));
-		periodo = new JLabel("Perido");
+		periodo = new JLabel("Periodo");
 		nombreCia = new JLabel("Nombre Compañia");
 		JLabel labEstado= new JLabel("Estado de Resultados");
 		labEstado.setHorizontalAlignment(SwingConstants.CENTER);

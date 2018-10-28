@@ -96,9 +96,13 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	private void calcularIndicadores() {
-		double indicadorRentabilidadBruta =0;//Aqui usen algun metodo del mundo para calcular esto
-		double indicadorRentabilidadOperativa =0; // Lo mismo
-		double indicadoresRentabilidadNeta =0; // IGUAL XD
+		double utilbru = (Double)ventanaEstado.getTabla().getDtm().getValueAt(2, 1);
+		double utilope = (Double)ventanaEstado.getTabla().getDtm().getValueAt(4, 1);
+		double utilneta = (Double)ventanaEstado.getTabla().getDtm().getValueAt(11, 1);
+		double ventas = (Double)ventanaEstado.getTabla().getDtm().getValueAt(0, 1);
+		double indicadorRentabilidadBruta = utilbru/ventas;//Aqui usen algun metodo del mundo para calcular esto
+		double indicadorRentabilidadOperativa =utilope/ventas;; // Lo mismo
+		double indicadoresRentabilidadNeta =utilneta/ventas;; // IGUAL XD
 		ventanaIndicadores.mostrarIndicadores(indicadorRentabilidadBruta, indicadorRentabilidadOperativa, indicadoresRentabilidadNeta);
 		
 	}
