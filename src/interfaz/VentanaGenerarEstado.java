@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
+import model.Factory;
+
 public class VentanaGenerarEstado extends JFrame {
 
 	private VentanaPrincipal principal;
@@ -47,7 +49,9 @@ public class VentanaGenerarEstado extends JFrame {
 
 
 	public void generarEstado() {
-		// TODO Auto-generated method stub
+		Factory f = principal.getFactory();
+		
+		//panelBotonesEstado.
 		
 	}
 

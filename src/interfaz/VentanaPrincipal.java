@@ -65,9 +65,15 @@ public class VentanaPrincipal extends JFrame {
 
 
 	public void generarEstado() {
-		ventanaEstado.setVisible(true);
-		this.setVisible(false);
-		
+//		if(fabrica==null)
+//		{
+			//JOptionPane.showMessageDialog(null, "Tiene que agregar elementos al inventario", "Error", JOptionPane.ERROR_MESSAGE);
+		//}
+//		else
+//		{
+			ventanaEstado.setVisible(true);
+			this.setVisible(false);
+		//}
 	}
 
 

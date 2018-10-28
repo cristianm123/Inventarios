@@ -90,6 +90,30 @@ public class PanelBotonesEstadoResultados extends JPanel {
 		jTxtFecha.setText("");
 		jTxtNombreCompania.setText("");
 	}
+
+	public JTextField getjTxtGastosOp() {
+		return jTxtGastosOp;
+	}
+
+	public JTextField getjTxtOtrosIngresos() {
+		return jTxtOtrosIngresos;
+	}
+
+	public JTextField getjTxtOtrosGastos() {
+		return jTxtOtrosGastos;
+	}
+
+	public JTextField getjTxtImpuesto() {
+		return jTxtImpuesto;
+	}
+
+	public JTextField getjTxtNombreCompania() {
+		return jTxtNombreCompania;
+	}
+
+	public JTextField getjTxtFecha() {
+		return jTxtFecha;
+	}
 	
 
 }
