@@ -61,6 +61,7 @@ public class PanelTabla extends JPanel {
 		
 	}
 	
+	//Esta solo para peps, añadir un condicional para hacerlo tambien para pp
 	public void aniadirEntrada(int tipo, String detalle, double valorUnitario,int cantidad) throws QueueException {
 		Calendar c = new GregorianCalendar();
 		String dia = Integer.toString(c.get(Calendar.DATE));
@@ -98,7 +99,7 @@ public class PanelTabla extends JPanel {
 		dtm.addRow(fila);
 		
 	}
-	
+	//Esta solo para peps, añadir un condicional para hacerlo tambien para pp
 	public void aniadirSalida(int tipo, String detalle, double valorUnitario,int cantidad) throws QueueException {
 		Calendar c = new GregorianCalendar();
 		String dia = Integer.toString(c.get(Calendar.DATE));
@@ -149,16 +150,15 @@ public class PanelTabla extends JPanel {
 		Object[] fila = {fecha,detalle, null,null,null,null, null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_purchases_returned()-p.getNum_sales(), p.getFinalInventory()};
 		dtm.addRow(fila);
 	}
-	
-	public void saldo() throws QueueException
+	//Sirve para peps y para pp
+	public void saldo(int q, double v) throws QueueException
 	{
 		Calendar c = new GregorianCalendar();
 		String dia = Integer.toString(c.get(Calendar.DATE));
 		String mes = Integer.toString(c.get(Calendar.MONTH)+1);
 		String annio = Integer.toString(c.get(Calendar.YEAR));
 		String fecha =dia+"/"+mes+"/"+annio;
-		PEPS p = principal.getPrincipal().getFactory().getPEPS();
-		Object[] fila = {fecha,"Saldo inicial",p.getInventory().front().getKey(),p.getInventory().front().getValue(),p.getInventory().front().getValue()*p.getInventory().front().getKey(),null, null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_sales(), p.getFinalInventory()};
+		Object[] fila = {fecha,"Saldo inicial",v,q,q*v,null, null, q, q*v};
 		dtm.addRow(fila);
 	}
 	

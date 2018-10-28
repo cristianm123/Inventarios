@@ -7,20 +7,31 @@ public class Factory {
 	public static final int PEPS = 0;
 	public static final int PROM = 1;
 	private PEPS peps;
-	
+	private PP pp;
 	public Factory(int units, double price, int method)
 	{
 		if(method==PEPS)
 		{
 			peps = new PEPS(units, price);
 		}
+		else if(method==PROM)
+		{
+			pp = new PP(units, price);
+		}
 	}
+	
 	
 	public PEPS getPEPS()
 	{
 		return peps;
 	}
 	
+	public PP getPP()
+	{
+		return pp;
+	}
+	
+	//añadir el caso en el que se use pp
 	public double getSales()
 	{
 		double ret = 0;
@@ -30,7 +41,7 @@ public class Factory {
 		}
 		return ret;
 	}
-	
+	//añadir el caso en el que se use pp
 	public double getCostSales()
 	{
 		double ret = 0;

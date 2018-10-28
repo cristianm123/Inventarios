@@ -51,15 +51,23 @@ public class VentanaPrincipal extends JFrame {
 		vp.setVisible(true);
 	}
 
-
+	//añadir el caso en el que se use pp
 	public void agregarTransaccion() throws QueueException {
 		String[] o = {"PEPS", "Promedio ponderado"};
-		if(JOptionPane.showOptionDialog(null, "Elija el metodo para la valoracion de los inventarios", "Metodo", 0, 0, null, o, -1)==0)
+		int op = JOptionPane.showOptionDialog(null, "Elija el metodo para la valoracion de los inventarios", "Metodo", 0, 0, null, o, -1);
+		if(op==Factory.PEPS)
 		{
 			int q = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique las cantidades iniciales", "Saldo inicial", 0));
 			int v = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique el precio por unidad inicial", "Saldo inicial", 0));
 			fabrica = new Factory(q, v, Factory.PEPS);
-			ventanaAgregarTransaccion.getPanelTabla().saldo();
+			ventanaAgregarTransaccion.getPanelTabla().saldo(q, v);
+		}
+		else if(op==Factory.PROM)
+		{
+			int q = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique las cantidades iniciales", "Saldo inicial", 0));
+			int v = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique el precio por unidad inicial", "Saldo inicial", 0));
+			fabrica = new Factory(q, v, Factory.PROM);
+			ventanaAgregarTransaccion.getPanelTabla().saldo(q, v);
 		}
 		ventanaAgregarTransaccion.setVisible(true);
 		this.setVisible(false);
@@ -68,15 +76,15 @@ public class VentanaPrincipal extends JFrame {
 
 
 	public void generarEstado() {
-//		if(fabrica==null)
-//		{
-			//JOptionPane.showMessageDialog(null, "Tiene que agregar elementos al inventario", "Error", JOptionPane.ERROR_MESSAGE);
-		//}
-//		else
-//		{
+		if(fabrica==null)
+		{
+			JOptionPane.showMessageDialog(null, "Tiene que agregar elementos al inventario", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		else
+		{
 			ventanaEstado.setVisible(true);
 			this.setVisible(false);
-		//}
+		}
 	}
 
 

@@ -10,7 +10,7 @@ public class PEPS {
 	sales_returned, last_price, initial_inventory;
 	private int num_sales, num_purchases, num_purchases_returned, num_sales_returned, initial_units;
 	
-	public PEPS(int purch, double price)
+	public PEPS(int purch, double price) 
 	{
 		inventory = new Queue<>();
 		inventory.enqueue(new Pair<Double, Integer>(price, purch));
