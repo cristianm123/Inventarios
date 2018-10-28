@@ -87,7 +87,7 @@ public class PanelBotonesTransaccion extends JPanel implements ActionListener{
 					
 					break;
 				case DEV_COMPRA:
-					principal.agregarTransaccion(tipo,"Devolucion compra",Integer.parseInt(jTxtCantidad.getText()),Double.parseDouble(jTxtValor.getText()));
+					principal.agregarTransaccion(tipo,"Devolucion compra",Integer.parseInt(jTxtCantidad.getText()),0);
 					
 					break;
 				case DEV_VENTA:

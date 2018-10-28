@@ -24,9 +24,10 @@ public class PEPS {
 		initial_units = purch;
 	}
 	
-	public void sell(int units, double price) throws QueueException
+	public Queue<Pair<Double, Integer>> sell(int units, double price) throws QueueException
 	{
 		int sold = 0;
+		Queue<Pair<Double, Integer>> sale = new Queue<>();
 		while(sold<units)
 		{
 			if(inventory.front().getValue()<(units-sold))
@@ -35,7 +36,7 @@ public class PEPS {
 				num_sales+=inventory.front().getValue();
 				cost_sales+=(inventory.front().getValue()*inventory.front().getKey());
 				last_price=inventory.front().getKey();
-				inventory.dequeue();
+				sale.enqueue(inventory.dequeue());
 				
 			}
 			else if(inventory.front().getValue()>(units-sold))
@@ -43,6 +44,7 @@ public class PEPS {
 				num_sales+=(units-sold);
 				cost_sales+=(units-sold)*inventory.front().getKey();
 				inventory.front().setValue(inventory.front().getValue()-(units-sold));
+				sale.enqueue(new Pair<Double, Integer>(inventory.front().getKey(), units-sold));
 				last_price=inventory.front().getKey();
 				sold=units;
 			}
@@ -51,11 +53,12 @@ public class PEPS {
 				num_sales += inventory.front().getValue();
 				cost_sales+=(inventory.front().getKey()*inventory.front().getValue());
 				last_price=inventory.front().getKey();
-				inventory.dequeue();
+				sale.enqueue(inventory.dequeue());
 				sold=units;
 			}
 		}
 		sales+=units*price;
+		return sale;
 	}
 	
 	public void buy(int units, double price)
@@ -65,10 +68,11 @@ public class PEPS {
 		purchases+=(units*price);
 	}
 	
-	public void returnPurchase(int units) throws QueueException
+	public Queue<Pair<Double, Integer>> returnPurchase(int units) throws QueueException
 	{
 		int returned = 0;
 		Stack<Pair<Double, Integer>> stack = new Stack<>();
+		Queue<Pair<Double, Integer>> queue = new Queue<>();
 		while(!inventory.isEmpty())
 		{
 			stack.push(inventory.dequeue());
@@ -86,7 +90,7 @@ public class PEPS {
 				num_purchases_returned+=inventory.front().getValue();
 				purchases_returned+=(inventory.front().getValue()*inventory.front().getKey());
 				purchases-=inventory.front().getValue()*inventory.front().getKey();
-				inventory.dequeue();
+				queue.enqueue(inventory.dequeue());
 				
 			}
 			else if(inventory.front().getValue()>(units-returned))
@@ -95,6 +99,7 @@ public class PEPS {
 				purchases_returned+=(units-returned)*inventory.front().getKey();
 				purchases-=(units-returned)*inventory.front().getKey();
 				inventory.front().setValue(inventory.front().getValue()-(units-returned));
+				queue.enqueue(new Pair<Double, Integer>(inventory.front().getKey(), units-returned));
 				returned=units;
 			}
 			else
@@ -102,9 +107,10 @@ public class PEPS {
 				num_purchases_returned += inventory.front().getValue();
 				purchases_returned+=(inventory.front().getKey()*inventory.front().getValue());
 				purchases-=inventory.front().getKey()*inventory.front().getValue();
-				inventory.dequeue();
+				queue.enqueue(inventory.dequeue());
 				returned=units;
 			}
+			return queue;
 		}
 		while(!inventory.isEmpty())
 		{
@@ -116,6 +122,7 @@ public class PEPS {
 			stack.pop();
 		}
 		num_purchases-=units;
+		return queue;
 	}
 	
 	public void returnSale(int units, double price) throws QueueException
@@ -181,5 +188,13 @@ public class PEPS {
 	public int getInitialUnits()
 	{
 		return initial_units;
+	}
+
+	public int getNum_purchases_returned() {
+		return num_purchases_returned;
+	}
+
+	public int getNum_sales_returned() {
+		return num_sales_returned;
 	}
 }

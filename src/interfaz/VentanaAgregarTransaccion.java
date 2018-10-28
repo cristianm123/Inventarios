@@ -27,7 +27,6 @@ public class VentanaAgregarTransaccion extends JFrame {
 		panelTitulos = new PanelTitulos();
 		this.setSize(904, 550);
 		this.setLayout(new BorderLayout());
-		this.setResizable(false);
 		this.setTitle("Transacciones");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.add(panelTabla,BorderLayout.CENTER);

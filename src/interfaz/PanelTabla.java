@@ -51,7 +51,7 @@ public class PanelTabla extends JPanel {
 		String[] titulos= new String[]{"Fecha","Detalle","Valor/U","Cantidad","Total","Cantidad","Total","Cantidad","Total"};
 		dtm= new DefaultTableModel(data,titulos);
 		jTblTransacciones=new JTable(dtm);
-		jTblTransacciones.setPreferredSize(new Dimension(904, 450));
+		//jTblTransacciones.setPreferredSize(new Dimension(904, 450));
 		scroll= new JScrollPane(jTblTransacciones);	
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
@@ -66,6 +66,10 @@ public class PanelTabla extends JPanel {
 		String mes = Integer.toString(c.get(Calendar.MONTH)+1);
 		String annio = Integer.toString(c.get(Calendar.YEAR));
 		String fecha =dia+"/"+mes+"/"+annio;
+		Object[] fi = {"---","---","---","---", "---", "---", "---", "---","---"};
+		dtm.addRow(fi);
+		Object[] fil = {fecha,detalle, valorUnitario, cantidad, null, null, null, null,null};
+		dtm.addRow(fil);
 		PEPS p = principal.getPrincipal().getFactory().getPEPS();
 		if(tipo==PanelBotonesTransaccion.COMPRA)
 		{
@@ -80,7 +84,7 @@ public class PanelTabla extends JPanel {
 		while(!q.isEmpty())
 		{
 			
-			Object[] fila = {fecha,detalle,q.front().getKey(),q.front().getValue(),q.front().getValue()*q.front().getKey(),null,null,null,null};
+			Object[] fila = {fecha,detalle,q.front().getKey(),null, null, null, null, q.front().getValue(),q.front().getValue()*q.front().getKey()};
 			dtm.addRow(fila);
 			n.enqueue(q.dequeue());
 		}
@@ -88,7 +92,7 @@ public class PanelTabla extends JPanel {
 		{
 			q.enqueue(n.dequeue());
 		}
-		Object[] fila = {fecha,detalle, null,null,null,null, null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_sales(), p.getFinalInventory()};
+		Object[] fila = {fecha,detalle,null,null,null,null,null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_sales()-p.getNum_purchases_returned(), p.getFinalInventory()};
 		dtm.addRow(fila);
 		
 	}
@@ -100,20 +104,31 @@ public class PanelTabla extends JPanel {
 		String annio = Integer.toString(c.get(Calendar.YEAR));
 		String fecha =dia+"/"+mes+"/"+annio;
 		PEPS p = principal.getPrincipal().getFactory().getPEPS();
+		Queue<Pair<Double, Integer>> queue = new Queue<>();
+		Object[] fi = {"---","---","---","---", "---", "---", "---", "---","---"};
+		dtm.addRow(fi);
 		if(tipo==PanelBotonesTransaccion.VENTA)
 		{
-			p.sell(cantidad, valorUnitario);
+			queue = p.sell(cantidad, valorUnitario);
 		}
 		else
 		{
-			p.returnPurchase(cantidad);
+			queue = p.returnPurchase(cantidad);
 		}
 		Queue<Pair<Double, Integer>> q = p.getInventory();
 		Queue<Pair<Double, Integer>> n = new Queue<>();
+		while(!queue.isEmpty())
+		{
+			
+			Object[] fila = {fecha,detalle,queue.front().getKey(),null,null,queue.front().getValue(),queue.front().getValue()*queue.front().getKey(),null,null};
+			dtm.addRow(fila);
+			queue.dequeue();
+		}
+		
 		while(!q.isEmpty())
 		{
 			
-			Object[] fila = {fecha,detalle,q.front().getKey(),q.front().getValue(),q.front().getValue()*q.front().getKey(),null,null,null,null};
+			Object[] fila = {fecha,detalle,q.front().getKey(),null,null,null, null,q.front().getValue(),q.front().getValue()*q.front().getKey()};
 			dtm.addRow(fila);
 			n.enqueue(q.dequeue());
 		}
@@ -121,7 +136,7 @@ public class PanelTabla extends JPanel {
 		{
 			q.enqueue(n.dequeue());
 		}
-		Object[] fila = {fecha,detalle, null,null,null,null, null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_sales(), p.getFinalInventory()};
+		Object[] fila = {fecha,detalle, null,null,null,null, null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_purchases_returned()-p.getNum_sales(), p.getFinalInventory()};
 		dtm.addRow(fila);
 	}
 	
