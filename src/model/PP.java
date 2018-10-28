@@ -10,7 +10,7 @@ public class PP {
 	private Stack<Pair<Double,Integer>> doitSales;
 	private int contSales; //Cantidad de unidades vendidas
 	private List<Pair<Double, Integer >> inventory;
-	private Stack<Double> lastPrice; // Precios de Venta(No de Costo) de las ventas
+	private Stack<Pair<Double, Double>> lastPrice; // Precios de Venta(No de Costo) de las ventas
 	private double saleCost; // Costo de venta
 	private double saleValue; // Valor de ventas
 	private double saldo ;
@@ -51,32 +51,33 @@ public class PP {
 		while(sold!=units) {
 			if(inventory.get(0).getValue()<(units - sold)) {
 				contSales +=inventory.get(0).getValue();
-				
-				saleCost += inventory.get(0).getValue()*pp;
+				saleValue += inventory.get(0).getValue()*price;
+				saleCost -= inventory.get(0).getValue()*pp;
 				saldo -= inventory.get(0).getValue()*pp;
-				doitSales.push(inventory.remove(0));
-				lastPrice.push(price);
-				
 				sold +=inventory.get(0).getValue();
+				doitSales.push(inventory.remove(0));
+				lastPrice.push(new Pair<Double, Double>(price, pp));
+				
 			}
 			else if(inventory.get(0).getValue()>(units - sold)){
-				contSales += units - sold;
+				contSales += (units - sold);
 				doitSales.push(new Pair<Double, Integer>(inventory.get(0).getKey(), (units -sold)));
-				lastPrice.push(price);
+				saleValue += inventory.get(0).getValue()*price;
+				lastPrice.push(new Pair<Double, Double>(price, pp));
 				saleCost += (units -sold)*pp;
 				saldo -= (units - sold)*pp;
 				inventory.get(0).setValue(inventory.get(0).getValue() - (units - sold));
 				
-				sold += units -sold;
+				sold += (units -sold);
 			}
 			else {
 				contSales +=inventory.get(0).getValue();
-				
+				saleValue += inventory.get(0).getValue()*price;
 				saleCost += inventory.get(0).getValue()*pp;
 				saldo -= inventory.get(0).getValue()*pp;
-				doitSales.push(inventory.remove(0));
-				lastPrice.push(price);
 				sold +=inventory.get(0).getValue();
+				doitSales.push(inventory.remove(0));
+				lastPrice.push(new Pair<Double, Double>(price, pp));
 			}
 		}
 	}
@@ -120,43 +121,37 @@ public class PP {
 		
 		pp = saldo / calculateElementsInventory();
 	}
-	
+	 // Last Price : Key: Price ; Value: pp
 	public void returnSale(int units) throws NoSuchElementsExceptions{
 		
 		if(units > contSales)
 			throw new NoSuchElementsExceptions();
 		int ret = 0;
 		while(ret!=units) {
-			if(doitSales.peek().getValue()<(units - ret)) {
-				contSales -= doitSales.peek().getValue();
-				
-				saleCost -= inventory.get(0).getValue()*pp;
-				saldo -= inventory.get(0).getValue()*pp;
-				doitSales.push(inventory.remove(0));
-				lastPrice.push(price);
-				
-				ret +=inventory.get(0).getValue();
-			}
-			else if(doitSales.peek().getValue()>(units - ret)){
-				contSales += units - ret;
-				doitSales.push(new Pair<Double, Integer>(inventory.get(0).getKey(), (units -ret)));
-				lastPrice.push(price);
-				saleCost += (units -ret)*pp;
-				saldo -= (units - ret)*pp;
-				inventory.get(0).setValue(inventory.get(0).getValue() - (units - ret));
-				
-				ret += units -ret;
+			if(doitSales.peek().getValue()<=(units - ret)) {
+				contSales -= doitSales.peek().getValue();			
+				saleCost -= (doitSales.peek().getValue() * lastPrice.peek().getValue());
+				saldo += (doitSales.peek().getValue()* lastPrice.peek().getValue());
+				saleValue -= (doitSales.peek().getValue()*lastPrice.peek().getKey());
+				ret +=doitSales.peek().getValue();
+				inventory.add(doitSales.pop());
+				lastPrice.pop();
 			}
 			else {
-				contSales +=inventory.get(0).getValue();
+				contSales -= (units - ret);			
+				saleCost -= ((units - ret) * lastPrice.peek().getValue());
+				saldo += ((units - ret)* lastPrice.peek().getValue());
+				saleValue -= ((units - ret)*lastPrice.peek().getKey());
 				
-				saleCost += inventory.get(0).getValue()*pp;
-				saldo -= inventory.get(0).getValue()*pp;
-				doitSales.push(inventory.remove(0));
-				lastPrice.push(price);
-				ret +=inventory.get(0).getValue();
+				inventory.add(new Pair<Double, Integer>(doitSales.peek().getKey(), (doitSales.peek().getValue()- ( units - ret))));
+				doitSales.peek().setValue((doitSales.peek().getValue()- ( units - ret)));
+
+				ret = units;
 			}
+			
 		}
+		 
+		pp = saldo / calculateElementsInventory();
 	}
 
 
@@ -187,16 +182,6 @@ public class PP {
 
 	public void setInventory(List<Pair<Double, Integer>> inventory) {
 		this.inventory = inventory;
-	}
-
-
-	public Stack<Double> getLastPrice() {
-		return lastPrice;
-	}
-
-
-	public void setLastPrice(Stack<Double> lastPrice) {
-		this.lastPrice = lastPrice;
 	}
 
 
@@ -237,6 +222,16 @@ public class PP {
 
 	public void setPp(double pp) {
 		this.pp = pp;
+	}
+
+
+	public Stack<Pair<Double, Double>> getLastPrice() {
+		return lastPrice;
+	}
+
+
+	public void setLastPrice(Stack<Pair<Double, Double>> lastPrice) {
+		this.lastPrice = lastPrice;
 	}
 
 	
