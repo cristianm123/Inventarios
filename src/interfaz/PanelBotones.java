@@ -19,7 +19,7 @@ public class PanelBotones extends JPanel implements ActionListener{
 	public static final String AGREGAR ="agregar";
 	public static final String GENERAR_ESTADO = "generar";
 	public static final String MOSTRAR_INDICADORES = "mostrar";
-	public static final Color COLOR_BOTONES = new Color(220,221,226);
+	public static final Color COLOR_BOTONES = new Color(240,240,245);
 	
 	private VentanaPrincipal principal;
 	private JButton butAgregarTransacciones;
