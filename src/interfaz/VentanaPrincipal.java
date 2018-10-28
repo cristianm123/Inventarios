@@ -20,6 +20,8 @@ public class VentanaPrincipal extends JFrame {
 	private PanelBanner panelBanner;
 	private VentanaAgregarTransaccion ventanaAgregarTransaccion;
 	private VentanaGenerarEstado ventanaEstado;
+	private VentanaIndicadores ventanaIndicadores;
+	
 	//AQUI PONEN LAS RELACIONES CON EL MUNDO
 	private Factory fabrica;
 	
@@ -40,6 +42,7 @@ public class VentanaPrincipal extends JFrame {
 		this.add(panelBanner, BorderLayout.NORTH);
 		ventanaAgregarTransaccion = new VentanaAgregarTransaccion(this);
 		ventanaEstado = new VentanaGenerarEstado(this);
+		ventanaIndicadores = new VentanaIndicadores(this);
 	}
 
 
@@ -78,7 +81,17 @@ public class VentanaPrincipal extends JFrame {
 
 
 	public void mostrarIndicadores() {
-		// TODO Auto-generated method stub
+		calcularIndicadores();
+		ventanaIndicadores.setVisible(true);
+		this.setVisible(false);
+		
+	}
+
+	private void calcularIndicadores() {
+		double indicadorRentabilidadBruta =0;//Aqui usen algun metodo del mundo para calcular esto
+		double indicadorRentabilidadOperativa =0; // Lo mismo
+		double indicadoresRentabilidadNeta =0; // IGUAL XD
+		ventanaIndicadores.mostrarIndicadores(indicadorRentabilidadBruta, indicadorRentabilidadOperativa, indicadoresRentabilidadNeta);
 		
 	}
 
