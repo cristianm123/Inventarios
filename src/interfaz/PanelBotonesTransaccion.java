@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import util.QueueException;
+
 public class PanelBotonesTransaccion extends JPanel implements ActionListener{
 
 	public static final String BUT_AGREGAR = "but_agregar";
@@ -28,12 +30,10 @@ public class PanelBotonesTransaccion extends JPanel implements ActionListener{
 	private JLabel labTipo;
 	private JLabel labCantidad;
 	private JLabel labValor;
-	private JLabel labDetalle;
 	private JButton butAgregar;
 	private DefaultComboBoxModel dcbm;
 	private JTextField jTxtCantidad;
 	private JTextField jTxtValor;
-	private JTextField jTxtDetalle;
 
 	public PanelBotonesTransaccion(VentanaAgregarTransaccion ventana) {
 		principal= ventana;
@@ -46,7 +46,6 @@ public class PanelBotonesTransaccion extends JPanel implements ActionListener{
 		labTipo= new JLabel("Tipo");
 		labCantidad = new JLabel("Cantidad");
 		labValor = new JLabel("Valor/U");
-		labDetalle = new JLabel("Detalle");
 		butAgregar = new JButton("Agregar");
 		butAgregar.setBackground(PanelBotones.COLOR_BOTONES);
 		butAgregar.setActionCommand(BUT_AGREGAR);
@@ -57,18 +56,15 @@ public class PanelBotonesTransaccion extends JPanel implements ActionListener{
 		butAtras.addActionListener(this);
 		jTxtCantidad = new JTextField();
 		jTxtValor = new JTextField();
-		jTxtDetalle = new JTextField();
 		this.setPreferredSize(new Dimension(904,100));
-		this.setLayout(new GridLayout(2,6));
+		this.setLayout(new GridLayout(2,5));
 		this.setBorder(BorderFactory.createTitledBorder("Agregar"));
 		this.add(labTipo);
-		this.add(labDetalle);
 		this.add(labCantidad);
 		this.add(labValor);
 		this.add(new JLabel());
 		this.add(new JLabel());
 		this.add(comboBox);
-		this.add(jTxtDetalle);
 		this.add(jTxtCantidad);
 		this.add(jTxtValor);
 		this.add(butAgregar);
@@ -76,12 +72,43 @@ public class PanelBotonesTransaccion extends JPanel implements ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent evento) {
+	public void actionPerformed(ActionEvent evento){
 		String comando = evento.getActionCommand();
 		if(comando.equals(BUT_AGREGAR)) {
 			int tipo = comboBox.getSelectedIndex();
-			principal.agregarTransaccion(tipo,jTxtDetalle.getText(),Integer.parseInt(jTxtCantidad.getText()),Double.parseDouble(jTxtValor.getText()));
+			try {
+				switch (tipo) {
+				case COMPRA:
+					principal.agregarTransaccion(tipo,"Compra",Integer.parseInt(jTxtCantidad.getText()),Double.parseDouble(jTxtValor.getText()));
+					
+					break;
+				case VENTA:
+					principal.agregarTransaccion(tipo,"Venta",Integer.parseInt(jTxtCantidad.getText()),Double.parseDouble(jTxtValor.getText()));
+					
+					break;
+				case DEV_COMPRA:
+					principal.agregarTransaccion(tipo,"Devolucion compra",Integer.parseInt(jTxtCantidad.getText()),Double.parseDouble(jTxtValor.getText()));
+					
+					break;
+				case DEV_VENTA:
+					
+					principal.agregarTransaccion(tipo,"Devolucion venta",Integer.parseInt(jTxtCantidad.getText()),Double.parseDouble(jTxtValor.getText()));
+					break;
+					
+
+				default:
+					break;
+				}
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (QueueException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
+			jTxtCantidad.setText("");
+			jTxtValor.setText("");
 		}
 		else {
 			principal.atras();

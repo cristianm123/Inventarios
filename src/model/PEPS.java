@@ -8,7 +8,7 @@ public class PEPS {
 	private Queue<Pair<Double, Integer>> inventory;
 	private double cost_sales, purchases, sales, purchases_returned, 
 	sales_returned, last_price, initial_inventory;
-	private int num_sales, num_purchases, num_purchases_returned, num_sales_returned;
+	private int num_sales, num_purchases, num_purchases_returned, num_sales_returned, initial_units;
 	
 	public PEPS(int purch, double price)
 	{
@@ -21,6 +21,7 @@ public class PEPS {
 		sales = 0;
 		last_price = price;
 		initial_inventory = price*purch;
+		initial_units = purch;
 	}
 	
 	public void sell(int units, double price) throws QueueException
@@ -33,6 +34,7 @@ public class PEPS {
 				sold+=inventory.front().getValue();
 				num_sales+=inventory.front().getValue();
 				cost_sales+=(inventory.front().getValue()*inventory.front().getKey());
+				last_price=inventory.front().getKey();
 				inventory.dequeue();
 				
 			}
@@ -41,18 +43,19 @@ public class PEPS {
 				num_sales+=(units-sold);
 				cost_sales+=(units-sold)*inventory.front().getKey();
 				inventory.front().setValue(inventory.front().getValue()-(units-sold));
+				last_price=inventory.front().getKey();
 				sold=units;
 			}
 			else
 			{
 				num_sales += inventory.front().getValue();
 				cost_sales+=(inventory.front().getKey()*inventory.front().getValue());
+				last_price=inventory.front().getKey();
 				inventory.dequeue();
 				sold=units;
 			}
 		}
 		sales+=units*price;
-		last_price = price;
 	}
 	
 	public void buy(int units, double price)
@@ -123,7 +126,7 @@ public class PEPS {
 		}
 		else
 		{
-			inventory.enqueue(new Pair<Double, Integer>(inventory.front().getKey(), units));
+			inventory.enqueue(new Pair<Double, Integer>(last_price, units));
 		}
 		num_sales_returned+=units;
 		num_sales-=units;
@@ -143,6 +146,11 @@ public class PEPS {
 		}
 		inventory = j;
 		return a;
+	}
+	
+	public Queue<Pair<Double, Integer>> getInventory()
+	{
+		return inventory;
 	}
 	
 	public double getCost_sales() {
@@ -168,5 +176,10 @@ public class PEPS {
 	public double getInitialInventory()
 	{
 		return initial_inventory;
+	}
+	
+	public int getInitialUnits()
+	{
+		return initial_units;
 	}
 }

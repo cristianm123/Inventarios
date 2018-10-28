@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import util.QueueException;
+
 public class VentanaAgregarTransaccion extends JFrame {
 
 	private PanelTabla panelTabla;
@@ -14,12 +16,12 @@ public class VentanaAgregarTransaccion extends JFrame {
 	
 	
 	
-	public VentanaAgregarTransaccion(VentanaPrincipal p) {
+	public VentanaAgregarTransaccion(VentanaPrincipal p) throws QueueException {
 		principal = p;
 		inicializarComponentes();
 	}
 	
-	public void inicializarComponentes() {
+	public void inicializarComponentes() throws QueueException {
 		panelTabla = new PanelTabla(this);
 		panelBotonesTransaccion = new PanelBotonesTransaccion(this);
 		panelTitulos = new PanelTitulos();
@@ -45,30 +47,22 @@ public class VentanaAgregarTransaccion extends JFrame {
 		return 0;
 	}
 
-	public void agregarTransaccion(int tipo,String detalle, int cantidad, double valor) {
+	public void agregarTransaccion(int tipo,String detalle, int cantidad, double valor) throws QueueException {
 		if(tipo==PanelBotonesTransaccion.COMPRA) {
 			//COMPRA
-			int cantidadSaldo =0;//Aqui deben llamar al metodo que les cancule cuanto queda en la cantidad total del saldo
-			double totalSaldo =0;//Aqui deben llamar al metodo que les calculo cuanto queda en el valor total del saldo.
-			panelTabla.aniadirEntrada(detalle, valor, cantidad, valor*cantidad, cantidadSaldo, totalSaldo);
+			panelTabla.aniadirEntrada(tipo, detalle, valor, cantidad);
 		}
 		else if(tipo==PanelBotonesTransaccion.VENTA) {
 			//VENTA
-			int cantidadSaldo =0;//Aqui deben llamar al metodo que les cancule cuanto queda en la cantidad total del saldo
-			double totalSaldo =0;//Aqui deben llamar al metodo que les calculo cuanto queda en el valor total del saldo.
-			panelTabla.aniadirSalida(detalle, valor, cantidad, valor*cantidad, cantidadSaldo, totalSaldo);
+			panelTabla.aniadirSalida(tipo, detalle, valor, cantidad);
 		}
 		else if(tipo==PanelBotonesTransaccion.DEV_COMPRA) {
 			//DEVOLUCION EN COMPRA
-			int cantidadSaldo =0;//Aqui deben llamar al metodo que les cancule cuanto queda en la cantidad total del saldo
-			double totalSaldo =0;//Aqui deben llamar al metodo que les calculo cuanto queda en el valor total del saldo.
-			panelTabla.aniadirSalida(detalle, valor, cantidad, valor*cantidad, cantidadSaldo, totalSaldo);
+			panelTabla.aniadirSalida(tipo, detalle, valor, cantidad);
 		}
 		else {
 			//DEVOLUCION EN VENTA
-			int cantidadSaldo =0;//Aqui deben llamar al metodo que les cancule cuanto queda en la cantidad total del saldo
-			double totalSaldo =0;//Aqui deben llamar al metodo que les calculo cuanto queda en el valor total del saldo.
-			panelTabla.aniadirEntrada(detalle, valor, cantidad, valor*cantidad, cantidadSaldo, totalSaldo);
+			panelTabla.aniadirEntrada(tipo, detalle, valor, cantidad);
 		}
 		
 	}
@@ -78,6 +72,16 @@ public class VentanaAgregarTransaccion extends JFrame {
 		this.setVisible(false);
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public VentanaPrincipal getPrincipal()
+	{
+		return principal;
+	}
+	
+	public PanelTabla getPanelTabla()
+	{
+		return panelTabla;
 	}
 	
 	

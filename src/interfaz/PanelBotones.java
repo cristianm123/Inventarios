@@ -12,6 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import util.QueueException;
+
 public class PanelBotones extends JPanel implements ActionListener{
 
 	public static final String AGREGAR ="agregar";
@@ -62,7 +64,12 @@ public class PanelBotones extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent evento) {
 		String comando=evento.getActionCommand();
 		if(comando.equals(AGREGAR)) {
-			principal.agregarTransaccion();
+			try {
+				principal.agregarTransaccion();
+			} catch (QueueException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else if(comando.equals(GENERAR_ESTADO)) {
 			principal.generarEstado();

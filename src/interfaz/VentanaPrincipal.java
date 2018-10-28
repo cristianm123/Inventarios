@@ -7,8 +7,12 @@ import java.awt.HeadlessException;
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+
+import model.Factory;
+import util.QueueException;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -16,14 +20,14 @@ public class VentanaPrincipal extends JFrame {
 	private PanelBanner panelBanner;
 	private VentanaAgregarTransaccion ventanaAgregarTransaccion;
 	//AQUI PONEN LAS RELACIONES CON EL MUNDO
+	private Factory fabrica;
 	
 	
-	
-	public VentanaPrincipal() {
+	public VentanaPrincipal() throws QueueException {
 		inicializarComponentes();
 	}
 	
-	public void inicializarComponentes() {
+	public void inicializarComponentes() throws QueueException {
 		this.setSize(836, 657);
 		this.setTitle("Inventarios");
 		this.setResizable(false);
@@ -37,13 +41,21 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws QueueException {
 		VentanaPrincipal vp= new VentanaPrincipal();
 		vp.setVisible(true);
 	}
 
 
-	public void agregarTransaccion() {
+	public void agregarTransaccion() throws QueueException {
+		String[] o = {"PEPS", "Promedio ponderado"};
+		if(JOptionPane.showOptionDialog(null, "Elija el metodo para la valoracion de los inventarios", "Metodo", 0, 0, null, o, -1)==0)
+		{
+			int q = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique las cantidades iniciales", "Saldo inicial", 0));
+			int v = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique el precio por unidad inicial", "Saldo inicial", 0));
+			fabrica = new Factory(q, v);
+			ventanaAgregarTransaccion.getPanelTabla().saldo();
+		}
 		ventanaAgregarTransaccion.setVisible(true);
 		this.setVisible(false);
 		
@@ -61,4 +73,8 @@ public class VentanaPrincipal extends JFrame {
 		
 	}
 
+	public Factory getFactory()
+	{
+		return fabrica;
+	}
 }
