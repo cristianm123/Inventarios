@@ -57,6 +57,7 @@ public class PanelTabla extends JPanel {
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		jTblTransacciones.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		jTblTransacciones.getColumnModel().getColumn(1).setCellRenderer(tcr);
+		jTblTransacciones.enable(false);
 		
 	}
 	
@@ -77,6 +78,7 @@ public class PanelTabla extends JPanel {
 		}
 		Queue<Pair<Double, Integer>> q = p.getInventory();
 		Queue<Pair<Double, Integer>> n = new Queue<>();
+
 		while(!q.isEmpty())
 		{
 			
@@ -100,6 +102,7 @@ public class PanelTabla extends JPanel {
 		String annio = Integer.toString(c.get(Calendar.YEAR));
 		String fecha =dia+"/"+mes+"/"+annio;
 		PEPS p = principal.getPrincipal().getFactory().getPEPS();
+
 		if(tipo==PanelBotonesTransaccion.VENTA)
 		{
 			p.sell(cantidad, valorUnitario);
@@ -110,6 +113,8 @@ public class PanelTabla extends JPanel {
 		}
 		Queue<Pair<Double, Integer>> q = p.getInventory();
 		Queue<Pair<Double, Integer>> n = new Queue<>();
+	
+		
 		while(!q.isEmpty())
 		{
 			
@@ -136,6 +141,8 @@ public class PanelTabla extends JPanel {
 		Object[] fila = {fecha,"Saldo inicial",p.getInventory().front().getKey(),p.getInventory().front().getValue(),p.getInventory().front().getValue()*p.getInventory().front().getKey(),null, null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_sales(), p.getFinalInventory()};
 		dtm.addRow(fila);
 	}
+	
+
 	
 	
 	

@@ -19,6 +19,7 @@ public class VentanaPrincipal extends JFrame {
 	private PanelBotones panelBotones;
 	private PanelBanner panelBanner;
 	private VentanaAgregarTransaccion ventanaAgregarTransaccion;
+	private VentanaGenerarEstado ventanaEstado;
 	//AQUI PONEN LAS RELACIONES CON EL MUNDO
 	private Factory fabrica;
 	
@@ -38,6 +39,7 @@ public class VentanaPrincipal extends JFrame {
 		this.add(panelBotones,BorderLayout.SOUTH);
 		this.add(panelBanner, BorderLayout.NORTH);
 		ventanaAgregarTransaccion = new VentanaAgregarTransaccion(this);
+		ventanaEstado = new VentanaGenerarEstado(this);
 	}
 
 
@@ -63,7 +65,8 @@ public class VentanaPrincipal extends JFrame {
 
 
 	public void generarEstado() {
-		// TODO Auto-generated method stub
+		ventanaEstado.setVisible(true);
+		this.setVisible(false);
 		
 	}
 
