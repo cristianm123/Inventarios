@@ -36,7 +36,7 @@ public class PanelTablaEstadoDeResultados extends JPanel {
 		jTblEstado.setPreferredSize(new Dimension(350,500));
 		jTblEstado.setEnabled(false);
 		panelTitulosEstado = new PanelTitulosEstado();
-		inicializarTabla();
+		inicializarTabla(0,0,0,0,0,0,false);
 		panelTitulosEstado = new PanelTitulosEstado();
 		this.add(panelTitulosEstado,BorderLayout.NORTH);
 		this.add(jTblEstado,BorderLayout.CENTER);
@@ -45,20 +45,36 @@ public class PanelTablaEstadoDeResultados extends JPanel {
 		
 	}
 
-	private void inicializarTabla() {
+	public void inicializarTabla(double ventas, double cventas, double gopera, double oting, double otgast, double imp, boolean res) {
 
-		Object[] row0 = {"Ventas",0};
-		Object[] row1 = {"Costo de Venta",0};
-		Object[] row2 = {"Utilidad Bruta",0};
-		Object[] row3 = {"Gastos Operacionales",0};
-		Object[] row4 = {"Utilidad Operativa",0};
-		Object[] row5 = {"Otros Ingresos",0};
-		Object[] row6 = {"Otros Gastos",0};
-		Object[] row7 = {"Utilidad Antes Impto",0};
-		Object[] row8 = {"Impuestos",0};
-		Object[] row9 = {"Utilidad despues Impto",0};
-		Object[] row10 = {"Reserva",0};
-		Object[] row11 = {"Utilidad Neta",0};
+		while(dtm.getRowCount()!=0)
+		{
+			dtm.removeRow(0);
+		}
+		double utilbru = ventas - cventas;
+		double utilope = utilbru-gopera;
+		double utilant = utilope+oting-otgast;
+		double impuestos = imp*utilant;
+		double utildesp = utilant-impuestos;
+		double reserva = 0;
+		if(res)
+		{
+			reserva = utildesp*0.1;
+		}
+		double utilnet = utildesp-reserva;
+		
+		Object[] row0 = {"Ventas",ventas};
+		Object[] row1 = {"Costo de Venta",cventas};
+		Object[] row2 = {"Utilidad Bruta",ventas-cventas};
+		Object[] row3 = {"Gastos Operacionales",gopera};
+		Object[] row4 = {"Utilidad Operativa",utilope};
+		Object[] row5 = {"Otros Ingresos",oting};
+		Object[] row6 = {"Otros Gastos",otgast};
+		Object[] row7 = {"Utilidad Antes Impto",utilant};
+		Object[] row8 = {"Impuestos",impuestos};
+		Object[] row9 = {"Utilidad despues Impto",utildesp};
+		Object[] row10 = {"Reserva",reserva};
+		Object[] row11 = {"Utilidad Neta",utilnet};
 		dtm.addRow(row0);
 		dtm.addRow(row1);
 		dtm.addRow(row2);
@@ -71,7 +87,6 @@ public class PanelTablaEstadoDeResultados extends JPanel {
 		dtm.addRow(row9);
 		dtm.addRow(row10);
 		dtm.addRow(row11);
-		
 		// TODO Auto-generated method stub
 		
 	}

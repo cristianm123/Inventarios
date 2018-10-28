@@ -4,16 +4,41 @@ import util.QueueException;
 
 public class Factory {
 
+	public static final int PEPS = 0;
+	public static final int PROM = 1;
 	private PEPS peps;
 	
-	public Factory(int units, double price)
+	public Factory(int units, double price, int method)
 	{
-		peps = new PEPS(units, price);
+		if(method==PEPS)
+		{
+			peps = new PEPS(units, price);
+		}
 	}
 	
 	public PEPS getPEPS()
 	{
 		return peps;
+	}
+	
+	public double getSales()
+	{
+		double ret = 0;
+		if(peps!=null)
+		{
+			ret = peps.getSales();
+		}
+		return ret;
+	}
+	
+	public double getCostSales()
+	{
+		double ret = 0;
+		if(peps!=null)
+		{
+			ret = peps.getCost_sales();
+		}
+		return ret;
 	}
 //	public static void main(String[] args) throws QueueException
 //	{

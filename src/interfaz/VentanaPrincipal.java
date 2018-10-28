@@ -58,7 +58,7 @@ public class VentanaPrincipal extends JFrame {
 		{
 			int q = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique las cantidades iniciales", "Saldo inicial", 0));
 			int v = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique el precio por unidad inicial", "Saldo inicial", 0));
-			fabrica = new Factory(q, v);
+			fabrica = new Factory(q, v, Factory.PEPS);
 			ventanaAgregarTransaccion.getPanelTabla().saldo();
 		}
 		ventanaAgregarTransaccion.setVisible(true);
