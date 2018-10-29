@@ -38,7 +38,9 @@ public class Factory {
 		if(peps!=null)
 		{
 			ret = peps.getSales();
-		}
+		} 
+		else if(pp != null)
+			ret = pp.getSaleValue();
 		return ret;
 	}
 	//añadir el caso en el que se use pp
@@ -49,6 +51,8 @@ public class Factory {
 		{
 			ret = peps.getCost_sales();
 		}
+		else if(pp != null)
+			ret = pp.getContSales();
 		return ret;
 	}
 //	public static void main(String[] args) throws QueueException

@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import util.NoSuchElementsExceptions;
 import util.QueueException;
 
 public class PanelBotonesTransaccion extends JPanel implements ActionListener{
@@ -105,7 +106,10 @@ public class PanelBotonesTransaccion extends JPanel implements ActionListener{
 			} catch (QueueException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			} catch (NoSuchElementsExceptions e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
 			
 			jTxtCantidad.setText("");
 			jTxtValor.setText("");

@@ -2,8 +2,10 @@ package interfaz;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,7 +16,8 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import model.PEPS;
+import model.*;
+import util.NoSuchElementsExceptions;
 import util.Pair;
 import util.Queue;
 import util.QueueException;
@@ -62,7 +65,7 @@ public class PanelTabla extends JPanel {
 	}
 	
 	//Esta solo para peps, añadir un condicional para hacerlo tambien para pp
-	public void aniadirEntrada(int tipo, String detalle, double valorUnitario,int cantidad) throws QueueException {
+	public void aniadirEntrada(int tipo, String detalle, double valorUnitario,int cantidad) throws QueueException, NoSuchElementsExceptions {
 		Calendar c = new GregorianCalendar();
 		String dia = Integer.toString(c.get(Calendar.DATE));
 		String mes = Integer.toString(c.get(Calendar.MONTH)+1);
@@ -73,83 +76,161 @@ public class PanelTabla extends JPanel {
 		Object[] fil = {fecha,detalle, valorUnitario, cantidad, null, null, null, null,null};
 		dtm.addRow(fil);
 		PEPS p = principal.getPrincipal().getFactory().getPEPS();
-		if(tipo==PanelBotonesTransaccion.COMPRA)
-		{
-			p.buy(cantidad, valorUnitario);
-		}
-		else
-		{
-			p.returnSale(cantidad, valorUnitario);
-		}
-		Queue<Pair<Double, Integer>> q = p.getInventory();
-		Queue<Pair<Double, Integer>> n = new Queue<>();
-
-		while(!q.isEmpty())
-		{
-			
-			Object[] fila = {fecha,detalle,q.front().getKey(),null, null, null, null, q.front().getValue(),q.front().getValue()*q.front().getKey()};
-			dtm.addRow(fila);
-			n.enqueue(q.dequeue());
-		}
-		while(!n.isEmpty())
-		{
-			q.enqueue(n.dequeue());
-		}
-		Object[] fila = {fecha,detalle,null,null,null,null,null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_sales()-p.getNum_purchases_returned(), p.getFinalInventory()};
-		dtm.addRow(fila);
+		PP pp = principal.getPrincipal().getFactory().getPP();
 		
+		
+		
+		
+		if(principal.getPrincipal().getFactory().getPEPS() == null) {
+			if(tipo==PanelBotonesTransaccion.COMPRA)
+			{
+				pp.buy(cantidad, valorUnitario);
+			}
+			else
+			{
+				pp.returnSale(cantidad);
+			}
+			List<Pair<Double, Integer>> q = pp.getInventory();
+			List<Pair<Double, Integer>> n = new ArrayList<>();
+
+			while(!q.isEmpty())
+			{
+				
+				Object[] fila = {fecha,detalle,q.get(0).getKey(),null, null, null, null, q.get(0).getValue(),q.get(0).getValue()*q.get(0).getKey()};
+				dtm.addRow(fila);
+				n.add(q.remove(0));
+			}
+			while(!n.isEmpty())
+			{
+				q.add(n.remove(0));
+			}
+			Object[] fila = {fecha,detalle,null,null,null,null,null, pp.getInitialunits()+pp.getNum_purchases()-pp.getContSales()-pp.getNum_purchases_returned(), pp.getSaldo()};
+			dtm.addRow(fila);
+		}
+		else {
+			
+			if(tipo==PanelBotonesTransaccion.COMPRA)
+			{
+				p.buy(cantidad, valorUnitario);
+			}
+			else
+			{
+				p.returnSale(cantidad, valorUnitario);
+			}
+			Queue<Pair<Double, Integer>> q = p.getInventory();
+			Queue<Pair<Double, Integer>> n = new Queue<>();
+
+			while(!q.isEmpty())
+			{
+				
+				Object[] fila = {fecha,detalle,q.front().getKey(),null, null, null, null, q.front().getValue(),q.front().getValue()*q.front().getKey()};
+				dtm.addRow(fila);
+				n.enqueue(q.dequeue());
+			}
+			while(!n.isEmpty())
+			{
+				q.enqueue(n.dequeue());
+			}
+			Object[] fila = {fecha,detalle,null,null,null,null,null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_sales()-p.getNum_purchases_returned(), p.getFinalInventory()};
+			dtm.addRow(fila);
+		}
+		
+
 	}
 	//Esta solo para peps, añadir un condicional para hacerlo tambien para pp
-	public void aniadirSalida(int tipo, String detalle, double valorUnitario,int cantidad) throws QueueException {
+	public void aniadirSalida(int tipo, String detalle, double valorUnitario,int cantidad) throws QueueException, NoSuchElementsExceptions {
 		Calendar c = new GregorianCalendar();
 		String dia = Integer.toString(c.get(Calendar.DATE));
 		String mes = Integer.toString(c.get(Calendar.MONTH)+1);
 		String annio = Integer.toString(c.get(Calendar.YEAR));
 		String fecha =dia+"/"+mes+"/"+annio;
 		PEPS p = principal.getPrincipal().getFactory().getPEPS();
+		PP pp = principal.getPrincipal().getFactory().getPP();
 
-
-
-		Queue<Pair<Double, Integer>> queue = new Queue<>();
-		Object[] fi = {"---","---","---","---", "---", "---", "---", "---","---"};
-		dtm.addRow(fi);
-
-		if(tipo==PanelBotonesTransaccion.VENTA)
-		{
-			queue = p.sell(cantidad, valorUnitario);
-		}
-		else
-		{
-			queue = p.returnPurchase(cantidad);
-		}
-		Queue<Pair<Double, Integer>> q = p.getInventory();
-		Queue<Pair<Double, Integer>> n = new Queue<>();
-
-	
-
-		while(!queue.isEmpty())
-		{
-			
-			Object[] fila = {fecha,detalle,queue.front().getKey(),null,null,queue.front().getValue(),queue.front().getValue()*queue.front().getKey(),null,null};
-			dtm.addRow(fila);
-			queue.dequeue();
-		}
 
 		
-		while(!q.isEmpty())
-		{
+		
+		if(principal.getPrincipal().getFactory().getPEPS() == null) {
+			List<Pair<Double, Integer>> queue = new ArrayList<>();
+			Object[] fi = {"---","---","---","---", "---", "---", "---", "---","---"};
+			dtm.addRow(fi);
+			if(tipo==PanelBotonesTransaccion.VENTA)
+			{
+				queue = pp.sell(cantidad, valorUnitario);
+			}
+			else
+			{
+				queue = pp.returnPurchase(cantidad);
+			}
+			List<Pair<Double, Integer>> q = pp.getInventory();
+			List<Pair<Double, Integer>> n = new ArrayList<>();
+
+			while(!queue.isEmpty())
+			{
+				
+				Object[] fila = {fecha,detalle,queue.get(0).getKey(),null,null,queue.get(0).getValue(),queue.get(0).getValue()*queue.get(0).getKey(),null,null};
+				dtm.addRow(fila);
+				queue.remove(0);
+			}
+
 			
-			Object[] fila = {fecha,detalle,q.front().getKey(),null,null,null, null,q.front().getValue(),q.front().getValue()*q.front().getKey()};
+			while(!q.isEmpty())
+			{
+				
+				Object[] fila = {fecha,detalle,q.get(0).getKey(),null,null,null, null,q.get(0).getValue(),q.get(0).getValue()*q.get(0).getKey()};
+				dtm.addRow(fila);
+				n.add(q.remove(0));
+			}
+			while(!n.isEmpty())
+			{
+				q.add(n.remove(0));
+			}
+			Object[] fila = {fecha,detalle, null,null,null,null, null, pp.getInitialunits()+pp.getNum_purchases()-pp.getNum_purchases_returned()-pp.getContSales(), pp.getSaldo()};
 			dtm.addRow(fila);
-			n.enqueue(q.dequeue());
 		}
-		while(!n.isEmpty())
-		{
-			q.enqueue(n.dequeue());
+		else {
+			
+			Queue<Pair<Double, Integer>> queue = new Queue<>();
+			Object[] fi = {"---","---","---","---", "---", "---", "---", "---","---"};
+			dtm.addRow(fi);
+			if(tipo==PanelBotonesTransaccion.VENTA)
+			{
+				queue = p.sell(cantidad, valorUnitario);
+			}
+			else
+			{
+				queue = p.returnPurchase(cantidad);
+			}
+			Queue<Pair<Double, Integer>> q = p.getInventory();
+			Queue<Pair<Double, Integer>> n = new Queue<>();
+
+		
+
+			while(!queue.isEmpty())
+			{
+				
+				Object[] fila = {fecha,detalle,queue.front().getKey(),null,null,queue.front().getValue(),queue.front().getValue()*queue.front().getKey(),null,null};
+				dtm.addRow(fila);
+				queue.dequeue();
+			}
+
+			
+			while(!q.isEmpty())
+			{
+				
+				Object[] fila = {fecha,detalle,q.front().getKey(),null,null,null, null,q.front().getValue(),q.front().getValue()*q.front().getKey()};
+				dtm.addRow(fila);
+				n.enqueue(q.dequeue());
+			}
+			while(!n.isEmpty())
+			{
+				q.enqueue(n.dequeue());
+			}
+			Object[] fila = {fecha,detalle, null,null,null,null, null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_purchases_returned()-p.getNum_sales(), p.getFinalInventory()};
+			dtm.addRow(fila);
 		}
-		Object[] fila = {fecha,detalle, null,null,null,null, null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_purchases_returned()-p.getNum_sales(), p.getFinalInventory()};
-		dtm.addRow(fila);
-	}
+		}
+		
 	//Sirve para peps y para pp
 	public void saldo(int q, double v) throws QueueException
 	{

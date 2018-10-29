@@ -25,7 +25,6 @@ public class VentanaPrincipal extends JFrame {
 	//AQUI PONEN LAS RELACIONES CON EL MUNDO
 	private Factory fabrica;
 	
-	
 	public VentanaPrincipal() throws QueueException {
 		inicializarComponentes();
 	}
@@ -45,13 +44,12 @@ public class VentanaPrincipal extends JFrame {
 		ventanaIndicadores = new VentanaIndicadores(this);
 	}
 
-
 	public static void main(String[] args) throws QueueException {
 		VentanaPrincipal vp= new VentanaPrincipal();
 		vp.setVisible(true);
 	}
 
-	//añadir el caso en el que se use pp
+	//añadir el caso en el que se use pp (Ya esta)
 	public void agregarTransaccion() throws QueueException {
 		String[] o = {"PEPS", "Promedio ponderado"};
 		int op = JOptionPane.showOptionDialog(null, "Elija el metodo para la valoracion de los inventarios", "Metodo", 0, 0, null, o, -1);
@@ -73,7 +71,6 @@ public class VentanaPrincipal extends JFrame {
 		this.setVisible(false);
 		
 	}
-
 
 	public void generarEstado() {
 		if(fabrica==null)

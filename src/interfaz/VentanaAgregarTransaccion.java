@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import util.NoSuchElementsExceptions;
 import util.QueueException;
 
 public class VentanaAgregarTransaccion extends JFrame {
@@ -46,7 +47,7 @@ public class VentanaAgregarTransaccion extends JFrame {
 		return 0;
 	}
 
-	public void agregarTransaccion(int tipo,String detalle, int cantidad, double valor) throws QueueException {
+	public void agregarTransaccion(int tipo,String detalle, int cantidad, double valor) throws QueueException, NoSuchElementsExceptions {
 		if(tipo==PanelBotonesTransaccion.COMPRA) {
 			//COMPRA
 			panelTabla.aniadirEntrada(tipo, detalle, valor, cantidad);
