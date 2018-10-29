@@ -51,6 +51,7 @@ public class VentanaPrincipal extends JFrame {
 
 	//añadir el caso en el que se use pp (Ya esta)
 	public void agregarTransaccion() throws QueueException {
+		ventanaAgregarTransaccion = new VentanaAgregarTransaccion(this);
 		String[] o = {"PEPS", "Promedio ponderado"};
 		int op = JOptionPane.showOptionDialog(null, "Elija el metodo para la valoracion de los inventarios", "Metodo", 0, 0, null, o, -1);
 		if(op==Factory.PEPS)
@@ -73,6 +74,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	public void generarEstado() {
+		ventanaEstado = new VentanaGenerarEstado(this);
 		if(fabrica==null)
 		{
 			JOptionPane.showMessageDialog(null, "Tiene que agregar elementos al inventario", "Error", JOptionPane.ERROR_MESSAGE);
@@ -86,6 +88,7 @@ public class VentanaPrincipal extends JFrame {
 
 
 	public void mostrarIndicadores() {
+		ventanaIndicadores = new VentanaIndicadores(this);
 		calcularIndicadores();
 		ventanaIndicadores.setVisible(true);
 		this.setVisible(false);

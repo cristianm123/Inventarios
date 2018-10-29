@@ -65,6 +65,7 @@ public class PanelBotones extends JPanel implements ActionListener{
 		String comando=evento.getActionCommand();
 		if(comando.equals(AGREGAR)) {
 			try {
+				
 				principal.agregarTransaccion();
 			} catch (QueueException e) {
 				// TODO Auto-generated catch block
