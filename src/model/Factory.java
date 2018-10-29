@@ -50,7 +50,7 @@ public class Factory {
 			ret = peps.getCost_sales();
 		}
 		else if(pp != null)
-			ret = pp.getContSales();
+			ret = pp.getSaleCost();
 		return ret;
 	}
 }

@@ -92,20 +92,10 @@ public class PanelTabla extends JPanel {
 			}
 			List<Pair<Double, Integer>> q = pp.getInventory();
 			List<Pair<Double, Integer>> n = new ArrayList<>();
-
-			while(!q.isEmpty())
-			{
-				
-				Object[] fila = {fecha,detalle,q.get(0).getKey(),null, null, null, null, q.get(0).getValue(),q.get(0).getValue()*q.get(0).getKey()};
-				dtm.addRow(fila);
-				n.add(q.remove(0));
-			}
-			while(!n.isEmpty())
-			{
-				q.add(n.remove(0));
-			}
-			Object[] fila = {fecha,detalle,null,null,null,null,null, pp.getInitialunits()+pp.getNum_purchases()-pp.getContSales()-pp.getNum_purchases_returned(), pp.getSaldo()};
+			
+			Object[] fila = {fecha,detalle, pp.getPp(),null,null,null, null, pp.calculateElementsInventory(), pp.getSaldo()};
 			dtm.addRow(fila);
+
 		}
 		else {
 			
@@ -164,29 +154,10 @@ public class PanelTabla extends JPanel {
 			}
 			List<Pair<Double, Integer>> q = pp.getInventory();
 			List<Pair<Double, Integer>> n = new ArrayList<>();
-
-			while(!queue.isEmpty())
-			{
-				
-				Object[] fila = {fecha,detalle,queue.get(0).getKey(),null,null,queue.get(0).getValue(),queue.get(0).getValue()*queue.get(0).getKey(),null,null};
-				dtm.addRow(fila);
-				queue.remove(0);
-			}
-
 			
-			while(!q.isEmpty())
-			{
-				
-				Object[] fila = {fecha,detalle,q.get(0).getKey(),null,null,null, null,q.get(0).getValue(),q.get(0).getValue()*q.get(0).getKey()};
-				dtm.addRow(fila);
-				n.add(q.remove(0));
-			}
-			while(!n.isEmpty())
-			{
-				q.add(n.remove(0));
-			}
-			Object[] fila = {fecha,detalle, null,null,null,null, null, pp.getInitialunits()+pp.getNum_purchases()-pp.getNum_purchases_returned()-pp.getContSales(), pp.getSaldo()};
+			Object[] fila = {fecha,detalle, pp.getPp(),null,null,cantidad, null, pp.calculateElementsInventory(), pp.getSaldo()};
 			dtm.addRow(fila);
+
 		}
 		else {
 			

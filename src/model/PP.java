@@ -58,7 +58,7 @@ public class PP {
 			if(inventory.get(0).getValue()<=(units - sold)) {
 				contSales +=inventory.get(0).getValue();
 				saleValue += inventory.get(0).getValue()*price;
-				saleCost -= inventory.get(0).getValue()*pp;
+				saleCost += inventory.get(0).getValue()*pp;
 				saldo -= inventory.get(0).getValue()*pp;
 				sold +=inventory.get(0).getValue();
 				li.add(inventory.get(0));
@@ -69,7 +69,7 @@ public class PP {
 			else {
 				contSales += (units - sold);
 				doitSales.push(new Pair<Double, Integer>(inventory.get(0).getKey(), (units -sold)));
-				saleValue += inventory.get(0).getValue()*price;
+				saleValue += (units - sold)*price;
 				lastPrice.push(new Pair<Double, Double>(price, pp));
 				saleCost += (units -sold)*pp;
 				saldo -= (units - sold)*pp;
@@ -94,7 +94,7 @@ public class PP {
 	public List<Pair<Double, Integer >> returnPurchase(int units) throws NoSuchElementsExceptions
 	{
 		if(calculateElementsInventory() < units) {
-			System.out.println(calculateElementsInventory());
+//			System.out.println(calculateElementsInventory());
 			throw new NoSuchElementsExceptions();
 		}
 		
@@ -139,7 +139,7 @@ public class PP {
 				saldo += (doitSales.peek().getValue()* lastPrice.peek().getValue());
 				saleValue -= (doitSales.peek().getValue()*lastPrice.peek().getKey());
 				ret +=doitSales.peek().getValue();
-				inventory.add(doitSales.pop());
+				inventory.add(0,doitSales.pop());
 				lastPrice.pop();
 			}
 			else {
@@ -148,7 +148,7 @@ public class PP {
 				saldo += ((units - ret)* lastPrice.peek().getValue());
 				saleValue -= ((units - ret)*lastPrice.peek().getKey());
 				
-				inventory.add(new Pair<Double, Integer>(doitSales.peek().getKey(), (doitSales.peek().getValue()- ( units - ret))));
+				inventory.add(0,new Pair<Double, Integer>(doitSales.peek().getKey(), (( units - ret))));
 				doitSales.peek().setValue((doitSales.peek().getValue()- ( units - ret)));
 
 				ret = units;
