@@ -52,7 +52,7 @@ public class Factory {
 			ret = peps.getCost_sales();
 		}
 		else if(pp != null)
-			ret = pp.getContSales();
+			ret = pp.getSaleCost();
 		return ret;
 	}
 //	public static void main(String[] args) throws QueueException
