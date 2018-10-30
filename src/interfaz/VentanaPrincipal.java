@@ -55,26 +55,34 @@ public class VentanaPrincipal extends JFrame {
 	public void agregarTransaccion() throws QueueException {
 		ventanaAgregarTransaccion = new VentanaAgregarTransaccion(this);
 		String[] o = {"PEPS", "Promedio ponderado"};
-		int op = JOptionPane.showOptionDialog(null, "Elija el metodo para la valoracion de los inventarios", "Metodo", 0, JOptionPane.QUESTION_MESSAGE, null, o, -1);
-		if(op==Factory.PEPS)
-		{
-			int q = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique las cantidades iniciales", "Saldo inicial", 0));
-			int v = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique el precio por unidad inicial", "Saldo inicial", 0));
-			fabrica = new Factory(q, v, Factory.PEPS);
-			ventanaAgregarTransaccion.getPanelTabla().saldo(q, v);
-			ventanaAgregarTransaccion.setVisible(true);
-			this.setVisible(false);
+		try {
+			int op = JOptionPane.showOptionDialog(null, "Elija el metodo para la valoracion de los inventarios", "Metodo", 0, JOptionPane.QUESTION_MESSAGE, null, o, -1);
+			if(op==Factory.PEPS)
+			{
+				int q = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique las cantidades iniciales", "Saldo inicial", 0));
+				int v = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique el precio por unidad inicial", "Saldo inicial", 0));
+				fabrica = new Factory(q, v, Factory.PEPS);
+				ventanaAgregarTransaccion.getPanelTabla().saldo(q, v);
+				ventanaAgregarTransaccion.setVisible(true);
+				this.setVisible(false);
+			}
+			else if(op==Factory.PROM)
+			{
+				int q = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique las cantidades iniciales", "Saldo inicial", 0));
+				int v = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique el precio por unidad inicial", "Saldo inicial", 0));
+				fabrica = new Factory(q, v, Factory.PROM);
+				ventanaAgregarTransaccion.getPanelTabla().saldo(q, v);
+				ventanaAgregarTransaccion.setVisible(true);
+				this.setVisible(false);
+			}
+			estado = false;
+		} catch (HeadlessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "Error al insertar datos", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		else if(op==Factory.PROM)
-		{
-			int q = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique las cantidades iniciales", "Saldo inicial", 0));
-			int v = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique el precio por unidad inicial", "Saldo inicial", 0));
-			fabrica = new Factory(q, v, Factory.PROM);
-			ventanaAgregarTransaccion.getPanelTabla().saldo(q, v);
-			ventanaAgregarTransaccion.setVisible(true);
-			this.setVisible(false);
-		}
-		estado = false;
 		
 	}
 

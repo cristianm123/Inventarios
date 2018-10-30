@@ -3,6 +3,7 @@ package interfaz;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import model.Factory;
 
@@ -53,14 +54,19 @@ public class VentanaGenerarEstado extends JFrame {
 	}
 
 	public void generarEstado() {
-		Factory f = principal.getFactory();
-		String nombre = panelBotonesEstado.getjTxtNombreCompania().getText();
-		String fecha = panelBotonesEstado.getjTxtFecha().getText();
-		panelTablaEstadoDeResultados.getTitulos().cambiarNombreCia(("Nombre compañia: " + nombre));
-		panelTablaEstadoDeResultados.getTitulos().cambiarPeriodo(("Periodo: "+fecha));
-		panelTablaEstadoDeResultados.inicializarTabla(f.getSales(), f.getCostSales(), panelBotonesEstado.getjTxtGastosOp(),
-		panelBotonesEstado.getjTxtOtrosIngresos(), panelBotonesEstado.getjTxtOtrosGastos(),
-		panelBotonesEstado.getjTxtImpuesto(), panelBotonesEstado.getReservas());
+		
+		try {
+			Factory f = principal.getFactory();
+			String nombre = panelBotonesEstado.getjTxtNombreCompania().getText();
+			String fecha = panelBotonesEstado.getjTxtFecha().getText();
+			panelTablaEstadoDeResultados.getTitulos().cambiarNombreCia(("Nombre compañia: " + nombre));
+			panelTablaEstadoDeResultados.getTitulos().cambiarPeriodo(("Periodo: "+fecha));
+			panelTablaEstadoDeResultados.inicializarTabla(f.getSales(), f.getCostSales(), panelBotonesEstado.getjTxtGastosOp(),
+			panelBotonesEstado.getjTxtOtrosIngresos(), panelBotonesEstado.getjTxtOtrosGastos(),
+			panelBotonesEstado.getjTxtImpuesto(), panelBotonesEstado.getReservas());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Error al insertar datos", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
 		
 	}

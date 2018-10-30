@@ -28,6 +28,10 @@ public class PEPS {
 	
 	public Queue<Pair<Double, Integer>> sell(int units, double price) throws QueueException
 	{
+		if(initial_units+num_purchases+num_sales_returned-num_sales-num_purchases_returned<units)
+		{
+			throw new QueueException("No hay suficientes unidades para vender");
+		}
 		int sold = 0;
 		Queue<Pair<Double, Integer>> sale = new Queue<>();
 		while(sold<units)
@@ -74,6 +78,10 @@ public class PEPS {
 	
 	public Queue<Pair<Double, Integer>> returnPurchase(int units) throws QueueException
 	{
+		if(num_purchases+num_sales_returned-num_sales-num_purchases_returned<units)
+		{
+			throw new QueueException("No hay suficientes unidades para devolver");
+		}
 		int returned = 0;
 		Stack<Pair<Double, Integer>> stack = new Stack<>();
 		Queue<Pair<Double, Integer>> queue = new Queue<>();
@@ -121,6 +129,10 @@ public class PEPS {
 	
 	public void returnSale(int units) throws QueueException
 	{
+		if(num_sales<units)
+		{
+			throw new QueueException("No hay suficientes unidades para devolver");
+		}
 		int returned = 0;
 		while(returned<units)
 		{

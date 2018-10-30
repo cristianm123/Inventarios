@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class PanelResultados extends JPanel implements ActionListener {
@@ -53,7 +54,12 @@ public class PanelResultados extends JPanel implements ActionListener {
 			principal.botonAtras();
 		}
 		else {
-			principal.generarEstado();
+			
+			try {
+				principal.generarEstado();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Error al insertar datos", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		
 		

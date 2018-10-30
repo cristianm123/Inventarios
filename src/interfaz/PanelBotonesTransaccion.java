@@ -10,6 +10,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -102,10 +103,10 @@ public class PanelBotonesTransaccion extends JPanel implements ActionListener{
 				}
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Error al ingresar valores", "Error", JOptionPane.ERROR_MESSAGE);
 			} catch (QueueException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			} catch (NoSuchElementsExceptions e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
