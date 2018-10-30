@@ -3,12 +3,15 @@ package interfaz;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class PanelTablaEstadoDeResultados extends JPanel {
@@ -18,6 +21,8 @@ public class PanelTablaEstadoDeResultados extends JPanel {
 	private DefaultTableModel dtm;
 	private JTable jTblEstado;
 	private PanelTitulosEstado panelTitulosEstado;
+	private DecimalFormat df; 
+	private DefaultTableCellRenderer tcr;
 
 	public PanelTablaEstadoDeResultados(VentanaGenerarEstado ventanaGenerarEstado) {
 		principal = ventanaGenerarEstado;
@@ -26,6 +31,7 @@ public class PanelTablaEstadoDeResultados extends JPanel {
 	}
 
 	private void inicializarComponentes() {
+		df = new DecimalFormat("#.00");
 		this.setPreferredSize(new Dimension(350,450));
 		this.setBorder(BorderFactory.createTitledBorder("TablaEstado"));
 		this.setLayout(new BorderLayout());
@@ -40,7 +46,9 @@ public class PanelTablaEstadoDeResultados extends JPanel {
 		panelTitulosEstado = new PanelTitulosEstado();
 		this.add(panelTitulosEstado,BorderLayout.NORTH);
 		this.add(jTblEstado,BorderLayout.CENTER);
-		
+		tcr = new DefaultTableCellRenderer();
+		tcr.setHorizontalAlignment(SwingConstants.RIGHT);
+		jTblEstado.getColumnModel().getColumn(1).setCellRenderer(tcr);
 		
 		
 	}
@@ -63,18 +71,18 @@ public class PanelTablaEstadoDeResultados extends JPanel {
 		}
 		double utilnet = utildesp-reserva;
 		
-		Object[] row0 = {"Ventas",ventas};
-		Object[] row1 = {"Costo de Venta",cventas};
-		Object[] row2 = {"Utilidad Bruta",ventas-cventas};
-		Object[] row3 = {"Gastos Operacionales",gopera};
-		Object[] row4 = {"Utilidad Operativa",utilope};
-		Object[] row5 = {"Otros Ingresos",oting};
-		Object[] row6 = {"Otros Gastos",otgast};
-		Object[] row7 = {"Utilidad Antes Impto",utilant};
-		Object[] row8 = {"Impuestos",impuestos};
-		Object[] row9 = {"Utilidad despues Impto",utildesp};
-		Object[] row10 = {"Reserva",reserva};
-		Object[] row11 = {"Utilidad Neta",utilnet};
+		Object[] row0 = {"Ventas","$"+df.format(ventas)};
+		Object[] row1 = {"Costo de Venta","($"+df.format(cventas)+")"};
+		Object[] row2 = {"Utilidad Bruta","$"+df.format(ventas-cventas)};
+		Object[] row3 = {"Gastos Operacionales","($"+df.format(gopera)+")"};
+		Object[] row4 = {"Utilidad Operativa","$"+df.format(utilope)};
+		Object[] row5 = {"Otros Ingresos","$"+df.format(oting)};
+		Object[] row6 = {"Otros Gastos","($"+df.format(otgast)+")"};
+		Object[] row7 = {"Utilidad Antes Impto","$"+df.format(utilant)};
+		Object[] row8 = {"Impuestos","($"+df.format(impuestos)+")"};
+		Object[] row9 = {"Utilidad despues Impto","$"+df.format(utildesp)};
+		Object[] row10 = {"Reserva","($"+df.format(reserva)+")"};
+		Object[] row11 = {"Utilidad Neta","$"+df.format(utilnet)};
 		dtm.addRow(row0);
 		dtm.addRow(row1);
 		dtm.addRow(row2);

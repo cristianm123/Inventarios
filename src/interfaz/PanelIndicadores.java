@@ -2,6 +2,7 @@ package interfaz;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.text.DecimalFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -17,6 +18,7 @@ public class PanelIndicadores extends JPanel {
 	private JLabel valorRentabilidadOperativa;
 	private JLabel labRentabilidadNeta;
 	private JLabel valorRentabilidadNeta;
+	private DecimalFormat df;
 	
 	
 	public PanelIndicadores() {
@@ -43,12 +45,13 @@ public class PanelIndicadores extends JPanel {
 		this.add(valorRentabilidadOperativa);
 		this.add(labRentabilidadNeta);
 		this.add(valorRentabilidadNeta);
+		df= new DecimalFormat("#.00");
 	}
 
 	public void mostrarIndicadores(double rentabilidadBruta, double rentabilidadOperativa, double rentabilidadNeta) {
-		valorRentabilidadBruta.setText((rentabilidadBruta*100)+"%");
-		valorRentabilidadOperativa.setText((rentabilidadOperativa*100)+"%");
-		valorRentabilidadNeta.setText((rentabilidadNeta*100)+"%");
+		valorRentabilidadBruta.setText(df.format(rentabilidadBruta*100)+"%");
+		valorRentabilidadOperativa.setText(df.format(rentabilidadOperativa*100)+"%");
+		valorRentabilidadNeta.setText(df.format(rentabilidadNeta*100)+"%");
 		
 	}
 	

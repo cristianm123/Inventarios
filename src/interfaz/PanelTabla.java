@@ -2,6 +2,7 @@ package interfaz;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -33,6 +34,9 @@ public class PanelTabla extends JPanel {
 	private JButton butBorrar;
 	private JButton butOrdenarNombre;
 	private JButton butOrdenarPuntaje;
+	private DecimalFormat df; 
+	private DefaultTableCellRenderer tcr;
+
 	
 	public PanelTabla(VentanaAgregarTransaccion ventanaAgregarTransaccion) throws QueueException {
 		principal= ventanaAgregarTransaccion;
@@ -40,6 +44,8 @@ public class PanelTabla extends JPanel {
 	}
 	
 	public void inicializarComponentes() {
+//	 System.out.println(df.format(number));
+		df = new DecimalFormat("#.00");
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(904,400));
 		inicializarTabla();
@@ -61,7 +67,17 @@ public class PanelTabla extends JPanel {
 		jTblTransacciones.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		jTblTransacciones.getColumnModel().getColumn(1).setCellRenderer(tcr);
 		jTblTransacciones.enable(false);
-		
+		tcr = new DefaultTableCellRenderer();
+		tcr.setHorizontalAlignment(SwingConstants.RIGHT);
+		DefaultTableCellRenderer tcrCenter = new DefaultTableCellRenderer();
+		tcrCenter.setHorizontalAlignment(SwingConstants.CENTER);
+		jTblTransacciones.getColumnModel().getColumn(2).setCellRenderer(tcr);
+		jTblTransacciones.getColumnModel().getColumn(4).setCellRenderer(tcr);
+		jTblTransacciones.getColumnModel().getColumn(6).setCellRenderer(tcr);
+		jTblTransacciones.getColumnModel().getColumn(8).setCellRenderer(tcr);
+		jTblTransacciones.getColumnModel().getColumn(3).setCellRenderer(tcrCenter);
+		jTblTransacciones.getColumnModel().getColumn(5).setCellRenderer(tcrCenter);
+		jTblTransacciones.getColumnModel().getColumn(7).setCellRenderer(tcrCenter);
 	}
 	
 	//Esta solo para peps, añadir un condicional para hacerlo tambien para pp
@@ -80,7 +96,7 @@ public class PanelTabla extends JPanel {
 		}
 		else
 		{
-			Object[] fil = {fecha,detalle, valorUnitario, cantidad, null, null, null, null,null};
+			Object[] fil = {fecha,detalle, "$"+df.format(valorUnitario), cantidad, null, null, null, null,null};
 			dtm.addRow(fil);
 		}
 		
@@ -102,7 +118,7 @@ public class PanelTabla extends JPanel {
 			List<Pair<Double, Integer>> q = pp.getInventory();
 			List<Pair<Double, Integer>> n = new ArrayList<>();
 			
-			Object[] fila = {fecha,detalle, pp.getPp(),null,null,null, null, pp.calculateElementsInventory(), pp.getSaldo()};
+			Object[] fila = {fecha,detalle, "$"+df.format(pp.getPp()),null,null,null, null, pp.calculateElementsInventory(), "$"+df.format(pp.getSaldo())};
 			dtm.addRow(fila);
 
 		}
@@ -122,7 +138,7 @@ public class PanelTabla extends JPanel {
 			while(!q.isEmpty())
 			{
 				
-				Object[] fila = {fecha,detalle,q.front().getKey(),null, null, null, null, q.front().getValue(),q.front().getValue()*q.front().getKey()};
+				Object[] fila = {fecha,detalle,"$"+df.format(q.front().getKey()),null, null, null, null, q.front().getValue(),"$"+df.format(q.front().getValue()*q.front().getKey())};
 				dtm.addRow(fila);
 				n.enqueue(q.dequeue());
 			}
@@ -130,7 +146,7 @@ public class PanelTabla extends JPanel {
 			{
 				q.enqueue(n.dequeue());
 			}
-			Object[] fila = {fecha,detalle,null,null,null,null,null, p.getInitialUnits()+p.getNum_purchases()+p.getNum_sales_returned()-p.getNum_sales()-p.getNum_purchases_returned(), p.getFinalInventory()};
+			Object[] fila = {fecha,detalle,null,null,null,null,null, p.getInitialUnits()+p.getNum_purchases()+p.getNum_sales_returned()-p.getNum_sales()-p.getNum_purchases_returned(),"$"+ df.format(p.getFinalInventory())};
 			dtm.addRow(fila);
 		}
 		
@@ -164,7 +180,7 @@ public class PanelTabla extends JPanel {
 			List<Pair<Double, Integer>> q = pp.getInventory();
 			List<Pair<Double, Integer>> n = new ArrayList<>();
 			
-			Object[] fila = {fecha,detalle, pp.getPp(),null,null,cantidad, null, pp.calculateElementsInventory(), pp.getSaldo()};
+			Object[] fila = {fecha,detalle, "$"+df.format(pp.getPp()),null,null,cantidad, null, pp.calculateElementsInventory(),"$"+ df.format(pp.getSaldo())};
 			dtm.addRow(fila);
 
 		}
@@ -189,7 +205,7 @@ public class PanelTabla extends JPanel {
 			while(!queue.isEmpty())
 			{
 				
-				Object[] fila = {fecha,detalle,queue.front().getKey(),null,null,queue.front().getValue(),queue.front().getValue()*queue.front().getKey(),null,null};
+				Object[] fila = {fecha,detalle,"$"+df.format(queue.front().getKey()),null,null,queue.front().getValue(),"$"+df.format(queue.front().getValue()*queue.front().getKey()),null,null};
 				dtm.addRow(fila);
 				queue.dequeue();
 			}
@@ -198,7 +214,7 @@ public class PanelTabla extends JPanel {
 			while(!q.isEmpty())
 			{
 				
-				Object[] fila = {fecha,detalle,q.front().getKey(),null,null,null, null,q.front().getValue(),q.front().getValue()*q.front().getKey()};
+				Object[] fila = {fecha,detalle,"$"+df.format(q.front().getKey()),null,null,null, null,q.front().getValue(),"$"+df.format(q.front().getValue()*q.front().getKey())};
 				dtm.addRow(fila);
 				n.enqueue(q.dequeue());
 			}
@@ -206,7 +222,7 @@ public class PanelTabla extends JPanel {
 			{
 				q.enqueue(n.dequeue());
 			}
-			Object[] fila = {fecha,detalle, null,null,null,null, null,  p.getInitialUnits()+p.getNum_purchases()+p.getNum_sales_returned()-p.getNum_sales()-p.getNum_purchases_returned(), p.getFinalInventory()};
+			Object[] fila = {fecha,detalle, null,null,null,null, null,  p.getInitialUnits()+p.getNum_purchases()+p.getNum_sales_returned()-p.getNum_sales()-p.getNum_purchases_returned(), "$"+df.format(p.getFinalInventory())};
 			dtm.addRow(fila);
 		}
 		}
@@ -219,7 +235,7 @@ public class PanelTabla extends JPanel {
 		String mes = Integer.toString(c.get(Calendar.MONTH)+1);
 		String annio = Integer.toString(c.get(Calendar.YEAR));
 		String fecha =dia+"/"+mes+"/"+annio;
-		Object[] fila = {fecha,"Saldo inicial",v,q,q*v,null, null, q, q*v};
+		Object[] fila = {fecha,"Saldo inicial","$"+df.format(v),q,"$"+df.format(q*v),null, null, q, "$"+df.format(q*v)};
 		dtm.addRow(fila);
 	}
 	
