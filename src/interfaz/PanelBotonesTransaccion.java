@@ -109,7 +109,7 @@ public class PanelBotonesTransaccion extends JPanel implements ActionListener{
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			} catch (NoSuchElementsExceptions e) {
 				// TODO Auto-generated catch block
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Error con las unidades", "Error", JOptionPane.ERROR_MESSAGE);
 			} 
 			
 			jTxtCantidad.setText("");
