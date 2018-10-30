@@ -6,6 +6,7 @@ import util.Stack;
 
 public class PEPS {
 	private Queue<Pair<Double, Integer>> inventory;
+	private Stack<Pair<Double, Integer>> stack;
 	private double cost_sales, purchases, sales, purchases_returned, 
 	sales_returned, last_price, initial_inventory;
 	private int num_sales, num_purchases, num_purchases_returned, num_sales_returned, initial_units;
@@ -19,9 +20,10 @@ public class PEPS {
 		num_purchases = 0;
 		num_sales = 0;
 		sales = 0;
-		last_price = price;
+		last_price = 0;
 		initial_inventory = price*purch;
 		initial_units = purch;
+		stack = new Stack<>();
 	}
 	
 	public Queue<Pair<Double, Integer>> sell(int units, double price) throws QueueException
@@ -35,7 +37,7 @@ public class PEPS {
 				sold+=inventory.front().getValue();
 				num_sales+=inventory.front().getValue();
 				cost_sales+=(inventory.front().getValue()*inventory.front().getKey());
-				last_price=inventory.front().getKey();
+				stack.push(inventory.front());
 				sale.enqueue(inventory.dequeue());
 				
 			}
@@ -45,19 +47,21 @@ public class PEPS {
 				cost_sales+=(units-sold)*inventory.front().getKey();
 				inventory.front().setValue(inventory.front().getValue()-(units-sold));
 				sale.enqueue(new Pair<Double, Integer>(inventory.front().getKey(), units-sold));
-				last_price=inventory.front().getKey();
+				stack.push(new Pair<Double, Integer>(inventory.front().getKey(), units-sold));
 				sold=units;
 			}
 			else
 			{
 				num_sales += inventory.front().getValue();
 				cost_sales+=(inventory.front().getKey()*inventory.front().getValue());
-				last_price=inventory.front().getKey();
+				stack.push(inventory.front());
 				sale.enqueue(inventory.dequeue());
 				sold=units;
 			}
 		}
+		
 		sales+=units*price;
+		last_price = price;
 		return sale;
 	}
 	
@@ -109,37 +113,103 @@ public class PEPS {
 				purchases-=inventory.front().getKey()*inventory.front().getValue();
 				queue.enqueue(inventory.dequeue());
 				returned=units;
+				
 			}
-			return queue;
 		}
-		while(!inventory.isEmpty())
-		{
-			stack.push(inventory.dequeue());
-		}
-		while(!stack.isEmpty())
-		{
-			inventory.enqueue(stack.top());
-			stack.pop();
-		}
-		num_purchases-=units;
 		return queue;
 	}
 	
-	public void returnSale(int units, double price) throws QueueException
+	public void returnSale(int units) throws QueueException
 	{
-		if(inventory.isEmpty())
+		int returned = 0;
+		while(returned<units)
 		{
-			inventory.enqueue(new Pair<Double, Integer>(last_price, units));
+			if(stack.top().getValue()<(units-returned))
+			{
+				returned+=stack.top().getValue();
+				num_sales_returned+=stack.top().getValue();
+				sales_returned+=(stack.top().getValue()*last_price);
+				cost_sales-=stack.top().getValue()*stack.top().getKey();
+				Stack<Pair<Double, Integer>> st = new Stack<>();
+				while(!inventory.isEmpty())
+				{
+					st.push(inventory.dequeue());
+				}
+				while(!st.isEmpty())
+				{
+					inventory.enqueue(st.top());
+					st.pop();
+				}
+				inventory.enqueue(stack.top());
+				stack.pop();
+				while(!inventory.isEmpty())
+				{
+					st.push(inventory.dequeue());
+				}
+				while(!st.isEmpty())
+				{
+					inventory.enqueue(st.top());
+					st.pop();
+				}
+			}
+			else if(stack.top().getValue()>(units-returned))
+			{
+				num_sales_returned+=(units-returned);
+				sales_returned+=(units-returned)*last_price;
+				cost_sales-=(units-returned)*stack.top().getKey();
+				stack.top().setValue(stack.top().getValue()-(units-returned));
+				Stack<Pair<Double, Integer>> st = new Stack<>();
+				while(!inventory.isEmpty())
+				{
+					st.push(inventory.dequeue());
+				}
+				while(!st.isEmpty())
+				{
+					inventory.enqueue(st.top());
+					st.pop();
+				}
+				inventory.enqueue(new Pair<Double, Integer>(stack.top().getKey(), units-returned));
+				while(!inventory.isEmpty())
+				{
+					st.push(inventory.dequeue());
+				}
+				while(!st.isEmpty())
+				{
+					inventory.enqueue(st.top());
+					st.pop();
+				}
+				returned=units;
+			}
+			else
+			{
+				num_sales_returned += stack.top().getValue();
+				sales_returned+=(stack.top().getKey()*stack.top().getValue());
+				cost_sales-=stack.top().getKey()*stack.top().getValue();
+				Stack<Pair<Double, Integer>> st = new Stack<>();
+				while(!inventory.isEmpty())
+				{
+					st.push(inventory.dequeue());
+				}
+				while(!st.isEmpty())
+				{
+					inventory.enqueue(st.top());
+					st.pop();
+				}
+				inventory.enqueue(stack.top());
+				stack.pop();
+				while(!inventory.isEmpty())
+				{
+					st.push(inventory.dequeue());
+				}
+				while(!st.isEmpty())
+				{
+					inventory.enqueue(st.top());
+					st.pop();
+				}
+				returned=units;
+			}
 		}
-		else
-		{
-			inventory.enqueue(new Pair<Double, Integer>(last_price, units));
-		}
-		num_sales_returned+=units;
-		num_sales-=units;
-		sales_returned+=(inventory.front().getValue()*inventory.front().getKey());
-		sales-=(units*price);
-		cost_sales-= inventory.front().getValue()*inventory.front().getKey();
+		sales-=(units*last_price);
 	}
 
 	public double getFinalInventory() throws QueueException

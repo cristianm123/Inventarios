@@ -73,8 +73,17 @@ public class PanelTabla extends JPanel {
 		String fecha =dia+"/"+mes+"/"+annio;
 		Object[] fi = {"---","---","---","---", "---", "---", "---", "---","---"};
 		dtm.addRow(fi);
-		Object[] fil = {fecha,detalle, valorUnitario, cantidad, null, null, null, null,null};
-		dtm.addRow(fil);
+		if(tipo == PanelBotonesTransaccion.DEV_VENTA)
+		{
+			Object[] fil = {fecha,detalle, "---", cantidad, null, null, null, null,null};
+			dtm.addRow(fil);
+		}
+		else
+		{
+			Object[] fil = {fecha,detalle, valorUnitario, cantidad, null, null, null, null,null};
+			dtm.addRow(fil);
+		}
+		
 		PEPS p = principal.getPrincipal().getFactory().getPEPS();
 		PP pp = principal.getPrincipal().getFactory().getPP();
 		
@@ -105,7 +114,7 @@ public class PanelTabla extends JPanel {
 			}
 			else
 			{
-				p.returnSale(cantidad, valorUnitario);
+				p.returnSale(cantidad);
 			}
 			Queue<Pair<Double, Integer>> q = p.getInventory();
 			Queue<Pair<Double, Integer>> n = new Queue<>();
@@ -121,7 +130,7 @@ public class PanelTabla extends JPanel {
 			{
 				q.enqueue(n.dequeue());
 			}
-			Object[] fila = {fecha,detalle,null,null,null,null,null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_sales()-p.getNum_purchases_returned(), p.getFinalInventory()};
+			Object[] fila = {fecha,detalle,null,null,null,null,null, p.getInitialUnits()+p.getNum_purchases()+p.getNum_sales_returned()-p.getNum_sales()-p.getNum_purchases_returned(), p.getFinalInventory()};
 			dtm.addRow(fila);
 		}
 		
@@ -197,7 +206,7 @@ public class PanelTabla extends JPanel {
 			{
 				q.enqueue(n.dequeue());
 			}
-			Object[] fila = {fecha,detalle, null,null,null,null, null, p.getInitialUnits()+p.getNum_purchases()-p.getNum_purchases_returned()-p.getNum_sales(), p.getFinalInventory()};
+			Object[] fila = {fecha,detalle, null,null,null,null, null,  p.getInitialUnits()+p.getNum_purchases()+p.getNum_sales_returned()-p.getNum_sales()-p.getNum_purchases_returned(), p.getFinalInventory()};
 			dtm.addRow(fila);
 		}
 		}

@@ -21,12 +21,14 @@ public class VentanaPrincipal extends JFrame {
 	private VentanaAgregarTransaccion ventanaAgregarTransaccion;
 	private VentanaGenerarEstado ventanaEstado;
 	private VentanaIndicadores ventanaIndicadores;
+	private boolean estado;
 	
 	//AQUI PONEN LAS RELACIONES CON EL MUNDO
 	private Factory fabrica;
 	
 	public VentanaPrincipal() throws QueueException {
 		inicializarComponentes();
+		estado = false;
 	}
 	
 	public void inicializarComponentes() throws QueueException {
@@ -53,13 +55,15 @@ public class VentanaPrincipal extends JFrame {
 	public void agregarTransaccion() throws QueueException {
 		ventanaAgregarTransaccion = new VentanaAgregarTransaccion(this);
 		String[] o = {"PEPS", "Promedio ponderado"};
-		int op = JOptionPane.showOptionDialog(null, "Elija el metodo para la valoracion de los inventarios", "Metodo", 0, 0, null, o, -1);
+		int op = JOptionPane.showOptionDialog(null, "Elija el metodo para la valoracion de los inventarios", "Metodo", 0, JOptionPane.QUESTION_MESSAGE, null, o, -1);
 		if(op==Factory.PEPS)
 		{
 			int q = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique las cantidades iniciales", "Saldo inicial", 0));
 			int v = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique el precio por unidad inicial", "Saldo inicial", 0));
 			fabrica = new Factory(q, v, Factory.PEPS);
 			ventanaAgregarTransaccion.getPanelTabla().saldo(q, v);
+			ventanaAgregarTransaccion.setVisible(true);
+			this.setVisible(false);
 		}
 		else if(op==Factory.PROM)
 		{
@@ -67,9 +71,10 @@ public class VentanaPrincipal extends JFrame {
 			int v = Integer.parseInt(JOptionPane.showInputDialog(null, "Indique el precio por unidad inicial", "Saldo inicial", 0));
 			fabrica = new Factory(q, v, Factory.PROM);
 			ventanaAgregarTransaccion.getPanelTabla().saldo(q, v);
+			ventanaAgregarTransaccion.setVisible(true);
+			this.setVisible(false);
 		}
-		ventanaAgregarTransaccion.setVisible(true);
-		this.setVisible(false);
+		estado = false;
 		
 	}
 
@@ -83,15 +88,23 @@ public class VentanaPrincipal extends JFrame {
 		{
 			ventanaEstado.setVisible(true);
 			this.setVisible(false);
+			estado = true;
 		}
 	}
 
 
 	public void mostrarIndicadores() {
-		ventanaIndicadores = new VentanaIndicadores(this);
-		calcularIndicadores();
-		ventanaIndicadores.setVisible(true);
-		this.setVisible(false);
+		if(estado)
+		{
+			ventanaIndicadores = new VentanaIndicadores(this);
+			calcularIndicadores();
+			ventanaIndicadores.setVisible(true);
+			this.setVisible(false);
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(null, "Tiene que generar un estado de resultados primero", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
 	}
 
@@ -100,9 +113,9 @@ public class VentanaPrincipal extends JFrame {
 		double utilope = (Double)ventanaEstado.getTabla().getDtm().getValueAt(4, 1);
 		double utilneta = (Double)ventanaEstado.getTabla().getDtm().getValueAt(11, 1);
 		double ventas = (Double)ventanaEstado.getTabla().getDtm().getValueAt(0, 1);
-		double indicadorRentabilidadBruta = utilbru/ventas;//Aqui usen algun metodo del mundo para calcular esto
-		double indicadorRentabilidadOperativa =utilope/ventas;; // Lo mismo
-		double indicadoresRentabilidadNeta =utilneta/ventas;; // IGUAL XD
+		double indicadorRentabilidadBruta = utilbru/ventas;
+		double indicadorRentabilidadOperativa =utilope/ventas;
+		double indicadoresRentabilidadNeta =utilneta/ventas;
 		ventanaIndicadores.mostrarIndicadores(indicadorRentabilidadBruta, indicadorRentabilidadOperativa, indicadoresRentabilidadNeta);
 		
 	}
