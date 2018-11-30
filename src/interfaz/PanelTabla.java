@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -113,10 +114,15 @@ public class PanelTabla extends JPanel {
 			}
 			else
 			{
-				pp.returnSale(cantidad);
+				LinkedList<Pair<Double,Integer>> qp =  (LinkedList<Pair<Double, Integer>>) pp.returnSale(cantidad);
+				while(!qp.isEmpty()) {
+					Object[] fila = {fecha,detalle,"$"+df.format(qp.get(0).getKey()),null, null, null, null, qp.get(0).getValue(),"$"+df.format(qp.get(0).getValue()*qp.get(0).getKey())};
+					dtm.addRow(fila);
+					qp.removeFirst();
+				}
 			}
-			List<Pair<Double, Integer>> q = pp.getInventory();
-			List<Pair<Double, Integer>> n = new ArrayList<>();
+			
+			
 			
 			Object[] fila = {fecha,detalle, "$"+df.format(pp.getPp()),null,null,null, null, pp.calculateElementsInventory(), "$"+df.format(pp.getSaldo())};
 			dtm.addRow(fila);
@@ -179,6 +185,14 @@ public class PanelTabla extends JPanel {
 			}
 			List<Pair<Double, Integer>> q = pp.getInventory();
 			List<Pair<Double, Integer>> n = new ArrayList<>();
+			
+			while(!queue.isEmpty())
+			{
+				
+				Object[] fila = {fecha,detalle,"$"+df.format(queue.get(0).getKey()),null,null,queue.get(0).getValue(),"$"+df.format(queue.get(0).getValue()*queue.get(0).getKey()),null,null};
+				dtm.addRow(fila);
+				queue.remove(0);
+			}
 			
 			Object[] fila = {fecha,detalle, "$"+df.format(pp.getPp()),null,null,cantidad, null, pp.calculateElementsInventory(),"$"+ df.format(pp.getSaldo())};
 			dtm.addRow(fila);

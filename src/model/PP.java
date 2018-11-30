@@ -1,5 +1,6 @@
 package model;
 import java.util.*;
+import java.util.Queue;
 import java.util.Stack;
 
 import util.*;
@@ -35,7 +36,6 @@ public class PP {
 		num_purchases_returned = 0;
 	}
 	
-	
 	public int calculateElementsInventory() {
 		double units = 0;
 		for (int i = 0; i < inventory.size(); i++) {
@@ -44,8 +44,6 @@ public class PP {
 		
 		return (int) units;
 	}
-	
-
 	// En el pairs el value es la cantidad de unidades y la key es el precio unitario
 	public List<Pair<Double, Integer >> sell(int units, double price) throws NoSuchElementsExceptions
 	{
@@ -113,7 +111,7 @@ public class PP {
 			}
 			else {
 				saldo -= (units - ret) * inventory.get(inventory.size()-1).getKey();
-				li.add(new Pair<Double, Integer>(inventory.get(inventory.size()-1).getKey(), inventory.get(inventory.size()-1).getValue() - (units - ret)));
+				li.add(new Pair<Double, Integer>(inventory.get(inventory.size()-1).getKey(), (units - ret)));
 				inventory.get(inventory.size()-1).setValue(inventory.get(inventory.size()-1).getValue() - (units - ret));
 				
 				ret += units -ret;
@@ -127,8 +125,8 @@ public class PP {
 		return li;
 	}
 	 // Last Price : Key: Price ; Value: pp
-	public void returnSale(int units) throws NoSuchElementsExceptions{
-		
+	public Queue<Pair<Double,Integer>> returnSale(int units) throws NoSuchElementsExceptions{
+		Queue<Pair<Double,Integer>> p = new LinkedList<>();
 		if(units > contSales)
 			throw new NoSuchElementsExceptions();
 		int ret = 0;
@@ -139,7 +137,8 @@ public class PP {
 				saldo += (doitSales.peek().getValue()* lastPrice.peek().getValue());
 				saleValue -= (doitSales.peek().getValue()*lastPrice.peek().getKey());
 				ret +=doitSales.peek().getValue();
-				inventory.add(0,doitSales.pop());
+				inventory.add(0,doitSales.peek());
+				p.offer(doitSales.pop());
 				lastPrice.pop();
 			}
 			else {
@@ -149,6 +148,7 @@ public class PP {
 				saleValue -= ((units - ret)*lastPrice.peek().getKey());
 				
 				inventory.add(0,new Pair<Double, Integer>(doitSales.peek().getKey(), (( units - ret))));
+				p.offer(new Pair<Double, Integer>(doitSales.peek().getKey(), (( units - ret))));
 				doitSales.peek().setValue((doitSales.peek().getValue()- ( units - ret)));
 
 				ret = units;
@@ -157,93 +157,76 @@ public class PP {
 		}
 		 
 		pp = saldo / calculateElementsInventory();
+		return p;
 	}
-
 
 	public Stack<Pair<Double, Integer>> getDoitSales() {
 		return doitSales;
 	}
 
-
 	public void setDoitSales(Stack<Pair<Double, Integer>> doitSales) {
 		this.doitSales = doitSales;
 	}
-
 
 	public int getContSales() {
 		return contSales;
 	}
 
-
 	public void setContSales(int contSales) {
 		this.contSales = contSales;
 	}
-
 
 	public List<Pair<Double, Integer>> getInventory() {
 		return inventory;
 	}
 
-
 	public void setInventory(List<Pair<Double, Integer>> inventory) {
 		this.inventory = inventory;
 	}
-
 
 	public double getSaleCost() {
 		return saleCost;
 	}
 
-
 	public void setSaleCost(double saleCost) {
 		this.saleCost = saleCost;
 	}
-
 
 	public double getSaleValue() {
 		return saleValue;
 	}
 
-
 	public void setSaleValue(double saleValue) {
 		this.saleValue = saleValue;
 	}
-
 
 	public double getSaldo() {
 		return saldo;
 	}
 
-
 	public void setSaldo(double saldo) {
 		this.saldo = saldo;
 	}
-
 
 	public double getPp() {
 		return pp;
 	}
 
-
 	public void setPp(double pp) {
 		this.pp = pp;
 	}
-
 
 	public Stack<Pair<Double, Double>> getLastPrice() {
 		return lastPrice;
 	}
 
-
 	public void setLastPrice(Stack<Pair<Double, Double>> lastPrice) {
 		this.lastPrice = lastPrice;
 	}
 
-
 	public int getNum_purchases() {
 		return num_purchases;
 	}
-
 
 	public void setNum_purchases(int num_purchases) {
 		this.num_purchases = num_purchases;
@@ -253,21 +236,16 @@ public class PP {
 		return initialunits;
 	}
 
-
 	public void setInitialunits(int initialunits) {
 		this.initialunits = initialunits;
 	}
-
 
 	public int getNum_purchases_returned() {
 		return num_purchases_returned;
 	}
 
-
 	public void setNum_purchases_returned(int num_purchases_returned) {
 		this.num_purchases_returned = num_purchases_returned;
 	}
-
-
 	
 }
